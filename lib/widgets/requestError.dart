@@ -34,16 +34,6 @@ class RequestError extends StatelessWidget {
               ),
             ),
           ),
-          // RaisedButton(
-          //   color: Theme.of(context).primaryColor,
-          //   child: Text('Go to Home Page'),
-          //   textColor: Colors.white,
-          //   padding: EdgeInsets.symmetric(horizontal: 50),
-          //   onPressed: () async {
-          //     await Provider.of<WeatherProvider>(context, listen: false)
-          //         .getWeatherData();
-          //   },
-          // ),
         ],
       ),
     );

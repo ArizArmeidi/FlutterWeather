@@ -32,12 +32,3 @@ class FadeIn extends StatelessWidget {
     );
   }
 }
-//  builder: (context, child, value) => Opacity(
-//         opacity: value.get(AniProps.opacity),
-//         child: child,
-//       ),
-//  Track("opacity")
-//           .add(Duration(milliseconds: 500), Tween(begin: 0.0, end: 1.0)),
-//       Track("translateX").add(
-//           Duration(milliseconds: 500), Tween(begin: 130.0, end: 0.0),
-//           curve: Curves.easeOut)

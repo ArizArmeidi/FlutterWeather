@@ -21,7 +21,6 @@ class MainWeather extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // color: Colors.red,
       padding: EdgeInsets.fromLTRB(25, 15, 25, 5),
       height: MediaQuery.of(context).size.height / 3.4,
       width: MediaQuery.of(context).size.width,
