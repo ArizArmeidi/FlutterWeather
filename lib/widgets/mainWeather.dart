@@ -24,9 +24,7 @@ class MainWeather extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(25, 15, 25, 5),
       height: MediaQuery.of(context).size.height / 3.4,
       width: MediaQuery.of(context).size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
+      child: ListView(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
