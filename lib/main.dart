@@ -29,8 +29,9 @@ class MyApp extends StatelessWidget {
           ),
           scaffoldBackgroundColor: Colors.white,
           primaryColor: Colors.blue,
-          accentColor: Colors.white,
           visualDensity: VisualDensity.adaptivePlatformDensity,
+          colorScheme:
+              ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
         ),
         home: HomeScreen(),
         routes: {
