@@ -12,6 +12,7 @@ class HourlyScreen extends StatelessWidget {
     final time = weather.date;
     final hours = DateFormat.Hm().format(time);
     return Container(
+      height: 80.0,
       margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
       padding: EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
@@ -27,6 +28,9 @@ class HourlyScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
+          SizedBox(
+            height: 10.0,
+          ),
           Text(
             hours ?? '',
             style: TextStyle(
@@ -47,6 +51,7 @@ class HourlyScreen extends StatelessWidget {
             padding: const EdgeInsets.only(left: 15, bottom: 15),
             child: MapString.mapStringToIcon(weather.condition, context, 25),
           ),
+          // SizedBox(height: 20.0,)
         ],
       ),
     );
@@ -59,14 +64,33 @@ class HourlyScreen extends StatelessWidget {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
-          centerTitle: true,
-          backgroundColor: Colors.transparent,
-          title: Text(
-            'Next 24 Hours',
-            style: TextStyle(color: Colors.black),
-          ),
-        ),
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            backgroundColor: Color(0xFF152C39),
+            title: Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                ),
+                SizedBox(
+                  width: 50,
+                ),
+                Text(
+                  'Next 24 Hours',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            )),
         body: Container(
+          color: Color(0xFF152C39),
           height: mediaQuery.size.height,
           width: mediaQuery.size.width,
           child: ListView(

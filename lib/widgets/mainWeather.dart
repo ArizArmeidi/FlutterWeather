@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-
 import '../helper/utils.dart';
 
 class MainWeather extends StatelessWidget {
@@ -9,18 +8,20 @@ class MainWeather extends StatelessWidget {
   MainWeather({this.wData});
 
   final TextStyle _style1 = TextStyle(
-    fontWeight: FontWeight.w700,
-    fontSize: 20,
-  );
+      fontWeight: FontWeight.w700, fontSize: 20, color: Color(0xFFF2FDFC));
   final TextStyle _style2 = TextStyle(
     fontWeight: FontWeight.w400,
-    color: Colors.grey[700],
+    color: Colors.white,
     fontSize: 16,
   );
 
   @override
   Widget build(BuildContext context) {
     return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20.0),
+        color: Color(0xFF142B37),
+      ),
       padding: EdgeInsets.fromLTRB(25, 15, 25, 5),
       height: MediaQuery.of(context).size.height / 3.4,
       width: MediaQuery.of(context).size.width,
@@ -29,7 +30,10 @@ class MainWeather extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.location_on_outlined),
+              Icon(
+                Icons.location_on_outlined,
+                color: Colors.white,
+              ),
               Text('${wData.weather.cityName}', style: _style1),
             ],
           ),
@@ -52,6 +56,7 @@ class MainWeather extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 55,
                   fontWeight: FontWeight.w600,
+                  color: Colors.white,
                 ),
               ),
             ],

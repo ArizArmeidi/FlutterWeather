@@ -20,7 +20,7 @@ class SevenDayForecast extends StatelessWidget {
             child: Text(
               dayOfWeek ?? '',
               style: TextStyle(
-                color: Colors.black,
+                color: Colors.white,
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -28,10 +28,13 @@ class SevenDayForecast extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(5, 5, 5, 20),
             child:
-            MapString.mapStringToIcon('${weather.condition}', context, 35),
+                MapString.mapStringToIcon('${weather.condition}', context, 35),
           ),
           Text(
             '${weather.condition}',
+            style: TextStyle(
+              color: Colors.white,
+            ),
           ),
         ],
       ),
@@ -48,9 +51,7 @@ class SevenDayForecast extends StatelessWidget {
           child: Text(
             'Next 7 Days',
             style: TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.bold,
-            ),
+                fontSize: 17, fontWeight: FontWeight.bold, color: Colors.white),
           ),
         ),
         Container(
@@ -60,7 +61,7 @@ class SevenDayForecast extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 25, vertical: 10),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(15),
-            color: Colors.white,
+            color: Color(0xFF152C39),
             boxShadow: [
               BoxShadow(
                 color: Colors.grey.withOpacity(0.4),
@@ -82,17 +83,20 @@ class SevenDayForecast extends StatelessWidget {
                         'Today',
                         style: TextStyle(
                           fontSize: 15,
+                          color: Colors.white,
                         ),
                       ),
                       Text(
                         '${wData.weather.temp.toStringAsFixed(1)}°',
                         style: TextStyle(
-                          fontSize: 30,
-                          fontWeight: FontWeight.w500,
-                        ),
+                            fontSize: 30,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.white),
                       ),
                       MapString.mapInputToWeather(
-                          '${wData.weather.currently}', context)
+                        '${wData.weather.currently}',
+                        context,
+                      )
                     ],
                   ),
                   Padding(

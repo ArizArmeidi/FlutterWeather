@@ -10,7 +10,7 @@ class WeatherDetail extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: Colors.white,
+        color: Color(0xFF152C39),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.25),
@@ -43,13 +43,18 @@ class WeatherDetail extends StatelessWidget {
                   style: TextStyle(
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
+                    color: Colors.white,
                   ),
                 ),
               ),
               FittedBox(
                 child: Text(
                   body,
-                  style: TextStyle(fontWeight: FontWeight.w400, fontSize: 15),
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 15,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],
@@ -71,6 +76,7 @@ class WeatherDetail extends StatelessWidget {
             style: TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         ),
