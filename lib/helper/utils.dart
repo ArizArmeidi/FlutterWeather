@@ -77,6 +77,7 @@ class MapString {
       text2,
       style: TextStyle(
         fontSize: 15,
+        color: Colors.white,
       ),
     );
   }
@@ -130,7 +131,7 @@ class MapString {
     return Icon(
       myIcon,
       size: iconSize,
-      color: Theme.of(context).primaryColor,
+      color: Colors.blue,
     );
   }
 }

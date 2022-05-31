@@ -18,7 +18,7 @@ class HourlyForecast extends StatelessWidget {
       padding: EdgeInsets.all(5),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),
-        color: Colors.white,
+        color: Color(0xFF152C39),
         boxShadow: [
           BoxShadow(
             color: Colors.grey.withOpacity(0.3),
@@ -29,6 +29,7 @@ class HourlyForecast extends StatelessWidget {
         ],
       ),
       height: 175,
+      //width: 200,
       child: Row(
         children: [
           Padding(
@@ -41,7 +42,7 @@ class HourlyForecast extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.black,
+                    color: Colors.white,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
@@ -57,7 +58,7 @@ class HourlyForecast extends StatelessWidget {
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 20,
-                      color: Colors.black,
+                      color: Colors.white,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -88,6 +89,7 @@ class HourlyForecast extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
+                    color: Colors.blue,
                   ),
                 ),
               ),
@@ -97,17 +99,22 @@ class HourlyForecast extends StatelessWidget {
                   style: TextStyle(color: Colors.blue),
                 ),
                 onPressed: () {
-                  Navigator.of(context).pushNamed(HourlyScreen.routeName);
+                  Navigator.of(context).pushNamed(
+                    HourlyScreen.routeName,
+                  );
                 },
               ),
             ],
           ),
           SizedBox(height: 5),
           Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: hourlyForecast
-                  .map((item) => hourlyWidget(item, context))
-                  .toList()),
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: hourlyForecast
+                .map(
+                  (item) => hourlyWidget(item, context),
+                )
+                .toList(),
+          ),
         ],
       ),
     );

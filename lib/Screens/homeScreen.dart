@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
 import '../provider/weatherProvider.dart';
 import '../widgets/WeatherInfo.dart';
 import '../widgets/fadeIn.dart';
@@ -22,7 +21,6 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   PageController _pageController = PageController();
   bool _isLoading;
-
   @override
   void initState() {
     super.initState();
@@ -54,17 +52,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Color(0xFF081B24),
         resizeToAvoidBottomInset: false,
         body: _isLoading
             ? Center(
                 child: CircularProgressIndicator(
-                  backgroundColor: myContext.primaryColor,
+                  backgroundColor: Colors.grey,
+                  color: Colors.red,
                 ),
               )
             : weatherData.loading
                 ? Center(
                     child: CircularProgressIndicator(
-                      backgroundColor: myContext.primaryColor,
+                      backgroundColor: Colors.grey,
+                      color: Colors.red,
                     ),
                   )
                 : weatherData.isLocationError
@@ -93,18 +94,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                         child: RefreshIndicator(
                                           onRefresh: () =>
                                               _refreshData(context),
-                                          backgroundColor: Colors.blue,
+                                          backgroundColor: Colors.white,
                                           child: ListView(
                                             children: [
                                               FadeIn(
                                                   delay: 0,
                                                   child: MainWeather(
-                                                      wData: weatherData)),
+                                                    wData: weatherData,
+                                                  )),
                                               FadeIn(
                                                 delay: 0.33,
                                                 child: WeatherInfo(
-                                                    wData: weatherData
-                                                        .currentWeather),
+                                                  wData: weatherData
+                                                      .currentWeather,
+                                                ),
                                               ),
                                               FadeIn(
                                                 delay: 0.66,
@@ -131,7 +134,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                             FadeIn(
                                                 delay: 0.66,
                                                 child: WeatherDetail(
-                                                    wData: weatherData)),
+                                                  wData: weatherData,
+                                                )),
                                           ],
                                         ),
                                       ),

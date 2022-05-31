@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import './Screens/hourlyWeatherScreen.dart';
 import './provider/weatherProvider.dart';
 import './Screens/weeklyWeatherScreen.dart';

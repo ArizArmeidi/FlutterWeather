@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:location/location.dart';
 import 'dart:convert';
-
 import '../models/weather.dart';
 import '../models/dailyWeather.dart';
 
 class WeatherProvider with ChangeNotifier {
-  String apiKey = 'Paste Your API Key Here';
+  String apiKey = '';
   Weather weather = Weather();
   DailyWeather currentWeather = DailyWeather();
   List<DailyWeather> hourlyWeather = [];
@@ -26,7 +25,9 @@ class WeatherProvider with ChangeNotifier {
       if (value) {
         final locData = await Location().getLocation();
         var latitude = locData.latitude;
+        print(latitude);
         var longitude = locData.longitude;
+        print(longitude);
         Uri url = Uri.parse(
             'https://api.openweathermap.org/data/2.5/weather?lat=$latitude&lon=$longitude&units=metric&appid=$apiKey');
         Uri dailyUrl = Uri.parse(
