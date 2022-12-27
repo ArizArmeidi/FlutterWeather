@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_weather_icons/flutter_weather_icons.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class UvIndex {
   static String mapUviValueToString({var uvi}) {
@@ -86,46 +86,46 @@ class MapString {
     IconData myIcon;
     switch (input) {
       case 'Thunderstorm':
-        myIcon = WeatherIcons.wiThunderstorm;
+        myIcon = MdiIcons.weatherLightningRainy;
         break;
       case 'Drizzle':
-        myIcon = WeatherIcons.wiSprinkle;
+        myIcon = MdiIcons.weatherPartlyRainy;
         break;
       case 'Rain':
-        myIcon = WeatherIcons.wiRain;
+        myIcon = MdiIcons.weatherRainy;
         break;
       case 'Snow':
-        myIcon = WeatherIcons.wiSnow;
+        myIcon = MdiIcons.weatherSnowy;
         break;
       case 'Clear':
-        myIcon = WeatherIcons.wiDaySunny;
+        myIcon = MdiIcons.weatherSunny;
         break;
       case 'Clouds':
-        myIcon = WeatherIcons.wiCloudy;
+        myIcon = MdiIcons.weatherCloudy;
         break;
       case 'Mist':
-        myIcon = WeatherIcons.wiFog;
+        myIcon = MdiIcons.weatherFog;
         break;
       case 'fog':
-        myIcon = WeatherIcons.wiFog;
+        myIcon = MdiIcons.weatherFog;
         break;
       case 'Smoke':
-        myIcon = WeatherIcons.wiSmoke;
+        myIcon = MdiIcons.smoke;
         break;
       case 'Haze':
+        myIcon = MdiIcons.weatherHazy;
+        break;
       case 'Dust':
       case 'Sand':
-        myIcon = WeatherIcons.wiSandstorm;
-        break;
       case 'Ash':
-        myIcon = WeatherIcons.wiVolcano;
+        myIcon = MdiIcons.weatherDust;
         break;
       case 'Squall':
       case 'Tornado':
-        myIcon = WeatherIcons.wiHurricaneWarning;
+        myIcon = MdiIcons.weatherTornado;
         break;
       default:
-        myIcon = WeatherIcons.wiNa;
+        myIcon = MdiIcons.weatherCloudy;
     }
     return Icon(
       myIcon,

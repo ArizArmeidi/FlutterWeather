@@ -46,7 +46,7 @@ class _LocationErrorState extends State<LocationError> {
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              primary: Theme.of(context).primaryColor,
+              backgroundColor: Theme.of(context).primaryColor,
               textStyle: TextStyle(color: Colors.white),
               padding: EdgeInsets.symmetric(horizontal: 50),
             ),

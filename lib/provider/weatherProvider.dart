@@ -14,14 +14,15 @@ class WeatherProvider with ChangeNotifier {
   List<DailyWeather> hourly24Weather = [];
   List<DailyWeather> fiveDayWeather = [];
   List<DailyWeather> sevenDayWeather = [];
-  bool loading;
+  bool isLoading = false;
   bool isRequestError = false;
   bool isLocationError = false;
 
-  getWeatherData() async {
-    loading = true;
+  getWeatherData({bool isRefresh = false}) async {
+    isLoading = true;
     isRequestError = false;
     isLocationError = false;
+    if (isRefresh) notifyListeners();
     await Location().requestService().then((value) async {
       if (value) {
         final locData = await Location().getLocation();
@@ -37,7 +38,7 @@ class WeatherProvider with ChangeNotifier {
               json.decode(response.body) as Map<String, dynamic>;
           weather = Weather.fromJson(extractedData);
         } catch (error) {
-          loading = false;
+          isLoading = false;
           this.isRequestError = true;
           notifyListeners();
         }
@@ -45,9 +46,9 @@ class WeatherProvider with ChangeNotifier {
           final response = await http.get(dailyUrl);
           final dailyData = json.decode(response.body) as Map<String, dynamic>;
           currentWeather = DailyWeather.fromJson(dailyData);
-          var tempHourly = [];
-          var temp24Hour = [];
-          var tempSevenDay = [];
+          List<DailyWeather> tempHourly = [];
+          List<DailyWeather> temp24Hour = [];
+          List<DailyWeather> tempSevenDay = [];
           List items = dailyData['daily'];
           List itemsHourly = dailyData['hourly'];
           tempHourly = itemsHourly
@@ -71,24 +72,24 @@ class WeatherProvider with ChangeNotifier {
           hourlyWeather = tempHourly;
           hourly24Weather = temp24Hour;
           sevenDayWeather = tempSevenDay;
-          loading = false;
+          isLoading = false;
           notifyListeners();
         } catch (error) {
-          loading = false;
+          isLoading = false;
           this.isRequestError = true;
           notifyListeners();
           throw error;
         }
       } else {
-        loading = false;
+        isLoading = false;
         isLocationError = true;
         notifyListeners();
       }
     });
   }
 
-  searchWeatherData({String location}) async {
-    loading = true;
+  searchWeatherData({required String location}) async {
+    isLoading = true;
     isRequestError = false;
     isLocationError = false;
     Uri url = Uri.parse(
@@ -98,7 +99,7 @@ class WeatherProvider with ChangeNotifier {
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       weather = Weather.fromJson(extractedData);
     } catch (error) {
-      loading = false;
+      isLoading = false;
       this.isRequestError = true;
       notifyListeners();
       throw error;
@@ -114,9 +115,9 @@ class WeatherProvider with ChangeNotifier {
       final dailyData = json.decode(response.body) as Map<String, dynamic>;
       print(dailyUrl);
       currentWeather = DailyWeather.fromJson(dailyData);
-      var tempHourly = [];
-      var temp24Hour = [];
-      var tempSevenDay = [];
+      List<DailyWeather> tempHourly = [];
+      List<DailyWeather> temp24Hour = [];
+      List<DailyWeather> tempSevenDay = [];
       List items = dailyData['daily'];
       List itemsHourly = dailyData['hourly'];
       tempHourly = itemsHourly
@@ -140,10 +141,10 @@ class WeatherProvider with ChangeNotifier {
       hourlyWeather = tempHourly;
       hourly24Weather = temp24Hour;
       sevenDayWeather = tempSevenDay;
-      loading = false;
+      isLoading = false;
       notifyListeners();
     } catch (error) {
-      loading = false;
+      isLoading = false;
       this.isRequestError = true;
       notifyListeners();
       throw error;

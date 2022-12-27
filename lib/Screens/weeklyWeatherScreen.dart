@@ -22,7 +22,7 @@ class WeeklyScreen extends StatelessWidget {
           Row(
             children: [
               Text(
-                dayOfWeek ?? '',
+                dayOfWeek,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: 20,

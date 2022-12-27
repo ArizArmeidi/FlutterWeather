@@ -21,7 +21,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   PageController _pageController = PageController();
-  bool _isLoading;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -43,103 +43,102 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Future<void> _refreshData(BuildContext context) async {
-    await Provider.of<WeatherProvider>(context, listen: false).getWeatherData();
+    await Provider.of<WeatherProvider>(context, listen: false)
+        .getWeatherData(isRefresh: true);
   }
 
   @override
   Widget build(BuildContext context) {
-    final weatherData = Provider.of<WeatherProvider>(context);
-    final myContext = Theme.of(context);
-    final mediaQuery = MediaQuery.of(context);
+    final themeContext = Theme.of(context);
 
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        body: _isLoading
-            ? Center(
-                child: CircularProgressIndicator(
-                  backgroundColor: myContext.primaryColor,
-                ),
-              )
-            : weatherData.loading
-                ? Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: myContext.primaryColor,
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Consumer<WeatherProvider>(
+          builder: (context, weatherProv, _) {
+            if (weatherProv.isLocationError) {
+              return LocationError();
+            }
+            if (weatherProv.isRequestError) {
+              return RequestError();
+            }
+            return Column(
+              children: [
+                SearchBar(),
+                Center(
+                  child: SmoothPageIndicator(
+                    controller: _pageController,
+                    count: 2,
+                    effect: ExpandingDotsEffect(
+                      activeDotColor: themeContext.primaryColor,
+                      dotHeight: 6,
+                      dotWidth: 6,
                     ),
-                  )
-                : weatherData.isLocationError
-                    ? LocationError()
-                    : Column(
-                        children: [
-                          SearchBar(),
-                          SmoothPageIndicator(
-                            controller: _pageController,
-                            count: 2,
-                            effect: ExpandingDotsEffect(
-                              activeDotColor: myContext.primaryColor,
-                              dotHeight: 6,
-                              dotWidth: 6,
-                            ),
+                  ),
+                ),
+                _isLoading || weatherProv.isLoading
+                    ? Expanded(
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            backgroundColor: themeContext.primaryColor,
+                            color: Colors.white,
                           ),
-                          weatherData.isRequestError
-                              ? RequestError()
-                              : Expanded(
-                                  child: PageView(
-                                    controller: _pageController,
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.all(10),
-                                        width: mediaQuery.size.width,
-                                        child: RefreshIndicator(
-                                          onRefresh: () =>
-                                              _refreshData(context),
-                                          backgroundColor: Colors.blue,
-                                          child: ListView(
-                                            children: [
-                                              FadeIn(
-                                                  delay: 0,
-                                                  child: MainWeather(
-                                                      wData: weatherData)),
-                                              FadeIn(
-                                                delay: 0.33,
-                                                child: WeatherInfo(
-                                                    wData: weatherData
-                                                        .currentWeather),
-                                              ),
-                                              FadeIn(
-                                                delay: 0.66,
-                                                child: HourlyForecast(
-                                                    weatherData.hourlyWeather),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
-                                      Container(
-                                        height: mediaQuery.size.height,
-                                        width: mediaQuery.size.width,
-                                        child: ListView(
-                                          children: [
-                                            FadeIn(
-                                              delay: 0.33,
-                                              child: SevenDayForecast(
-                                                wData: weatherData,
-                                                dWeather:
-                                                    weatherData.sevenDayWeather,
-                                              ),
-                                            ),
-                                            FadeIn(
-                                                delay: 0.66,
-                                                child: WeatherDetail(
-                                                    wData: weatherData)),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                        ),
+                      )
+                    : Expanded(
+                        child: PageView(
+                          physics: BouncingScrollPhysics(),
+                          controller: _pageController,
+                          children: [
+                            // First Page of the Page View
+                            RefreshIndicator(
+                              onRefresh: () async => _refreshData(context),
+                              child: ListView(
+                                padding: const EdgeInsets.all(10),
+                                shrinkWrap: true,
+                                children: [
+                                  FadeIn(
+                                    curve: Curves.easeIn,
+                                    duration: Duration(milliseconds: 250),
+                                    child: MainWeather(),
                                   ),
+                                  FadeIn(
+                                    curve: Curves.easeIn,
+                                    duration: Duration(milliseconds: 500),
+                                    child: WeatherInfo(),
+                                  ),
+                                  FadeIn(
+                                    curve: Curves.easeIn,
+                                    duration: Duration(milliseconds: 750),
+                                    child: HourlyForecast(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            // Second Page of the Page View
+                            ListView(
+                              padding: const EdgeInsets.all(10),
+                              children: [
+                                FadeIn(
+                                  curve: Curves.easeIn,
+                                  duration: Duration(milliseconds: 250),
+                                  child: SevenDayForecast(),
                                 ),
-                        ],
+                                const SizedBox(height: 16.0),
+                                FadeIn(
+                                  curve: Curves.easeIn,
+                                  duration: Duration(milliseconds: 500),
+                                  child: WeatherDetail(),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

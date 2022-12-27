@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/provider/weatherProvider.dart';
+import 'package:provider/provider.dart';
 
 class RequestError extends StatelessWidget {
   @override
@@ -10,22 +12,22 @@ class RequestError extends StatelessWidget {
         children: [
           Icon(
             Icons.wrong_location_outlined,
-            color: Colors.black,
+            color: Colors.blue,
             size: 100,
           ),
           SizedBox(height: 10),
           Text(
             'No Search Result',
             style: TextStyle(
-              color: Colors.black,
+              color: Colors.blue,
               fontSize: 30,
-              fontWeight: FontWeight.w500,
+              fontWeight: FontWeight.w700,
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 75, vertical: 10),
             child: Text(
-              "Please make sure that you entered the correct location name",
+              "Please make sure that you entered the correct location or check your device internet connection",
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.grey[700],
@@ -33,6 +35,17 @@ class RequestError extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
             ),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25.0),
+              ),
+            ),
+            child: Text('Return Home'),
+            onPressed: () =>
+                Provider.of<WeatherProvider>(context, listen: false)
+                    .getWeatherData(isRefresh: true),
           ),
         ],
       ),

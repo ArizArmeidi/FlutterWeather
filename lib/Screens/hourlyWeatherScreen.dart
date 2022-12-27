@@ -12,42 +12,36 @@ class HourlyScreen extends StatelessWidget {
     final time = weather.date;
     final hours = DateFormat.Hm().format(time);
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-      padding: EdgeInsets.symmetric(horizontal: 15),
-      decoration: BoxDecoration(
+      margin: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 5.0),
+      child: Material(
+        elevation: 5,
         color: Colors.white,
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
-            blurRadius: 5,
-            offset: Offset(2, 6),
+        borderRadius: BorderRadius.circular(15.0),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Text(
+                hours,
+                style: TextStyle(
+                  color: Colors.black,
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              Spacer(),
+              Text(
+                '${weather.dailyTemp.toStringAsFixed(1)}°',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(width: 16.0),
+              MapString.mapStringToIcon(weather.condition, context, 25),
+            ],
           ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Text(
-            hours ?? '',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 20,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          Spacer(),
-          Text(
-            '${weather.dailyTemp.toStringAsFixed(1)}°',
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 15, bottom: 15),
-            child: MapString.mapStringToIcon(weather.condition, context, 25),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -70,6 +64,7 @@ class HourlyScreen extends StatelessWidget {
           height: mediaQuery.size.height,
           width: mediaQuery.size.width,
           child: ListView(
+            physics: BouncingScrollPhysics(),
             children: weatherData.hourly24Weather
                 .map((item) => dailyWidget(item, context))
                 .toList(),
