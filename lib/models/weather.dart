@@ -1,32 +1,32 @@
 import 'package:flutter/cupertino.dart';
 
 class Weather with ChangeNotifier {
-  var temp;
-  var tempMax;
-  var tempMin;
-  var lat;
-  var long;
-  var feelsLike;
-  var pressure;
-  var description;
-  var currently;
-  var humidity;
-  var windSpeed;
-  var cityName;
+  final double temp;
+  final double tempMax;
+  final double tempMin;
+  final double lat;
+  final double long;
+  final double feelsLike;
+  final int pressure;
+  final String description;
+  final String currently;
+  final int humidity;
+  final double windSpeed;
+  final String cityName;
 
   Weather({
-    this.temp,
-    this.tempMax,
-    this.tempMin,
-    this.lat,
-    this.long,
-    this.feelsLike,
-    this.pressure,
-    this.description,
-    this.currently,
-    this.humidity,
-    this.windSpeed,
-    this.cityName,
+    required this.temp,
+    required this.tempMax,
+    required this.tempMin,
+    required this.lat,
+    required this.long,
+    required this.feelsLike,
+    required this.pressure,
+    required this.description,
+    required this.currently,
+    required this.humidity,
+    required this.windSpeed,
+    required this.cityName,
   });
 
   factory Weather.fromJson(Map<String, dynamic> json) {
