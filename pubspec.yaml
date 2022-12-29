@@ -28,6 +28,7 @@ dependencies:
   intl: ^0.18.0
   provider: ^6.0.5
   location: ^4.4.0
+  latlong2: ^0.8.1
   supercharged: ^2.1.1
   material_design_icons_flutter: ^6.0.7096
   smooth_page_indicator: ^1.0.0+2

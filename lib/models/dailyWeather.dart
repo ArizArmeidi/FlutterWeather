@@ -21,7 +21,7 @@ class DailyWeather with ChangeNotifier {
     final precipitation = calcPrecip.toStringAsFixed(0);
     return DailyWeather(
       precip: precipitation,
-      uvi: json['daily'][0]['uvi'],
+      uvi: (json['daily'][0]['uvi']).toInt(),
     );
   }
 
