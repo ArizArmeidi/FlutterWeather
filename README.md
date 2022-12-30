@@ -1,4 +1,6 @@
- <h1 align="center">FlutterWeather</h1>
+<h1 align="center">FlutterWeather</h1>
+<h2 align="center">Updated to Flutter 3.0</h2>
+
 
 <p align="center">
 <img src="https://user-images.githubusercontent.com/60814961/209642694-cc9f7a28-96cc-419a-bb5c-6fb23d7befe2.png" width="30%"></img> 
