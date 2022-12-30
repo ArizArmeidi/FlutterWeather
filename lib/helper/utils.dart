@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class UvIndex {
-  static String mapUviValueToString({var uvi}) {
+  static String mapUviValueToString({required dynamic uvi}) {
     String uvIndex;
     if (uvi <= 2) {
       return uvIndex = 'Low';
@@ -22,59 +22,59 @@ class UvIndex {
 }
 
 class MapString {
-  static Widget mapInputToWeather(String input, BuildContext context) {
-    String text2;
+  static Widget mapInputToWeather(BuildContext context, String input) {
+    String text;
     switch (input) {
       case 'Tornado':
-        text2 = 'Tornado';
+        text = 'Tornado';
         break;
       case 'Thunderstorm':
-        text2 = 'Thunderstorm';
+        text = 'Thunderstorm';
         break;
       case 'Drizzle':
-        text2 = 'Drizzly';
+        text = 'Drizzly';
         break;
       case 'Rain':
-        text2 = 'Raining';
+        text = 'Raining';
         break;
       case 'Snow':
-        text2 = 'Snowing';
+        text = 'Snowing';
         break;
       case 'Mist':
-        text2 = 'Misty';
+        text = 'Misty';
         break;
       case 'fog':
-        text2 = 'Foggy';
+        text = 'Foggy';
         break;
       case 'Smoke':
-        text2 = 'Smoky';
+        text = 'Smoky';
         break;
       case 'Squall':
-        text2 = 'Squally';
+        text = 'Squally';
         break;
       case 'Haze':
-        text2 = 'Hazy';
+        text = 'Hazy';
         break;
       case 'Dust':
-        text2 = 'Dusty';
+        text = 'Dusty';
         break;
       case 'Sand':
-        text2 = 'Sandy';
+        text = 'Sandy';
         break;
       case 'Ash':
-        text2 = 'Ashy';
+        text = 'Ashy';
         break;
       case 'Clear':
-        text2 = "Sunny";
+        text = "Sunny";
         break;
       case 'Clouds':
-        text2 = "Cloudy";
+        text = "Cloudy";
         break;
       default:
-        text2 = "No Info";
+        text = "No Info";
     }
     return Text(
-      text2,
+      text,
       style: TextStyle(
         fontSize: 15,
       ),
@@ -82,53 +82,56 @@ class MapString {
   }
 
   static Icon mapStringToIcon(
-      String input, BuildContext context, double iconSize) {
-    IconData myIcon;
+    BuildContext context,
+    String input,
+    double iconSize,
+  ) {
+    IconData icon;
     switch (input) {
       case 'Thunderstorm':
-        myIcon = MdiIcons.weatherLightningRainy;
+        icon = MdiIcons.weatherLightningRainy;
         break;
       case 'Drizzle':
-        myIcon = MdiIcons.weatherPartlyRainy;
+        icon = MdiIcons.weatherPartlyRainy;
         break;
       case 'Rain':
-        myIcon = MdiIcons.weatherRainy;
+        icon = MdiIcons.weatherRainy;
         break;
       case 'Snow':
-        myIcon = MdiIcons.weatherSnowy;
+        icon = MdiIcons.weatherSnowy;
         break;
       case 'Clear':
-        myIcon = MdiIcons.weatherSunny;
+        icon = MdiIcons.weatherSunny;
         break;
       case 'Clouds':
-        myIcon = MdiIcons.weatherCloudy;
+        icon = MdiIcons.weatherCloudy;
         break;
       case 'Mist':
-        myIcon = MdiIcons.weatherFog;
+        icon = MdiIcons.weatherFog;
         break;
       case 'fog':
-        myIcon = MdiIcons.weatherFog;
+        icon = MdiIcons.weatherFog;
         break;
       case 'Smoke':
-        myIcon = MdiIcons.smoke;
+        icon = MdiIcons.smoke;
         break;
       case 'Haze':
-        myIcon = MdiIcons.weatherHazy;
+        icon = MdiIcons.weatherHazy;
         break;
       case 'Dust':
       case 'Sand':
       case 'Ash':
-        myIcon = MdiIcons.weatherDust;
+        icon = MdiIcons.weatherDust;
         break;
       case 'Squall':
       case 'Tornado':
-        myIcon = MdiIcons.weatherTornado;
+        icon = MdiIcons.weatherTornado;
         break;
       default:
-        myIcon = MdiIcons.weatherCloudy;
+        icon = MdiIcons.weatherCloudy;
     }
     return Icon(
-      myIcon,
+      icon,
       size: iconSize,
       color: Theme.of(context).primaryColor,
     );

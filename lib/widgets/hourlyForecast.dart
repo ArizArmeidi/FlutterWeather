@@ -35,8 +35,8 @@ class HourlyForecast extends StatelessWidget {
                     ),
                   ),
                   MapString.mapStringToIcon(
-                    '${weather.condition}',
                     context,
+                    '${weather.condition}',
                     50,
                   ),
                   Container(

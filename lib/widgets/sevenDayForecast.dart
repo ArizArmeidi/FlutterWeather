@@ -24,7 +24,7 @@ class SevenDayForecast extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.fromLTRB(5, 5, 5, 20),
             child:
-                MapString.mapStringToIcon('${weather.condition}', context, 35),
+                MapString.mapStringToIcon(context, '${weather.condition}', 35),
           ),
           Text(
             '${weather.condition}',
@@ -80,13 +80,18 @@ class SevenDayForecast extends StatelessWidget {
                             ),
                           ),
                           MapString.mapInputToWeather(
-                              '${weatherProv.weather.currently}', context)
+                            context,
+                            '${weatherProv.weather.currently}',
+                          )
                         ],
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 20),
                         child: MapString.mapStringToIcon(
-                            '${weatherProv.weather.currently}', context, 45),
+                          context,
+                          '${weatherProv.weather.currently}',
+                          45,
+                        ),
                       ),
                     ],
                   );

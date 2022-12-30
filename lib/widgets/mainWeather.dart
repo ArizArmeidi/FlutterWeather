@@ -40,8 +40,8 @@ class MainWeather extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 MapString.mapStringToIcon(
-                  '${weatherProv.weather.currently}',
                   context,
+                  '${weatherProv.weather.currently}',
                   55,
                 ),
                 const SizedBox(width: 16.0),
