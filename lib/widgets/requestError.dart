@@ -45,7 +45,7 @@ class RequestError extends StatelessWidget {
             child: Text('Return Home'),
             onPressed: () =>
                 Provider.of<WeatherProvider>(context, listen: false)
-                    .getWeatherData(isRefresh: true),
+                    .getWeatherData(context, isRefresh: true),
           ),
         ],
       ),

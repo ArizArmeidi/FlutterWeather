@@ -38,13 +38,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _getData() async {
     _isLoading = true;
     final weatherData = Provider.of<WeatherProvider>(context, listen: false);
-    weatherData.getWeatherData();
+    weatherData.getWeatherData(context);
     _isLoading = false;
   }
 
   Future<void> _refreshData(BuildContext context) async {
     await Provider.of<WeatherProvider>(context, listen: false)
-        .getWeatherData(isRefresh: true);
+        .getWeatherData(context, isRefresh: true);
   }
 
   @override

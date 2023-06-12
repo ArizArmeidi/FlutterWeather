@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:location/location.dart';
 import 'package:provider/provider.dart';
 
 import '../provider/weatherProvider.dart';
@@ -12,8 +11,6 @@ class LocationError extends StatefulWidget {
 class _LocationErrorState extends State<LocationError> {
   @override
   Widget build(BuildContext context) {
-    Location location = Location();
-
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -52,37 +49,8 @@ class _LocationErrorState extends State<LocationError> {
             ),
             child: Text('Enable Location'),
             onPressed: () async {
-              await location.requestService().then((value) async {
-                if (value) {
-                  await Provider.of<WeatherProvider>(context, listen: false)
-                      .getWeatherData();
-                } else
-                  showDialog(
-                    context: context,
-                    barrierDismissible: false,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('Cannot Get Your Location'),
-                        content: SingleChildScrollView(
-                          child: ListBody(
-                            children: <Widget>[
-                              Text(
-                                  'This app uses your phone location to get your location accurate weather data'),
-                            ],
-                          ),
-                        ),
-                        actions: <Widget>[
-                          TextButton(
-                            child: Text('OK'),
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                          ),
-                        ],
-                      );
-                    },
-                  );
-              });
+              await Provider.of<WeatherProvider>(context, listen: false)
+                  .getWeatherData(context);
             },
           ),
         ],

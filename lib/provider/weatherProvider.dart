@@ -2,9 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
-import 'package:location/location.dart';
 
 import '../models/dailyWeather.dart';
 import '../models/weather.dart';
@@ -21,26 +21,68 @@ class WeatherProvider with ChangeNotifier {
   bool isLoading = false;
   bool isRequestError = false;
   bool isLocationError = false;
+  bool serviceEnabled = false;
+  LocationPermission? permission;
 
-  Future<void> getWeatherData({bool isRefresh = false}) async {
+  Future<Position>? requestLocation(BuildContext context) async {
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Location service disabled'),
+      ));
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('Permission denied'),
+        ));
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('Location permissions are permanently denied'),
+      ));
+      return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.',
+      );
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
+  Future<void> getWeatherData(
+    BuildContext context, {
+    bool isRefresh = false,
+  }) async {
     isLoading = true;
     isRequestError = false;
     isLocationError = false;
     if (isRefresh) notifyListeners();
-    await Location().requestService().then(
-      (value) async {
-        if (value) {
-          final locData = await Location().getLocation();
-          currentLocation = LatLng(locData.latitude!, locData.longitude!);
-          await getCurrentWeather(currentLocation!);
-          await getDailyWeather(currentLocation!);
-        } else {
-          isLoading = false;
-          isLocationError = true;
-          notifyListeners();
-        }
-      },
-    );
+
+    Position? locData = await requestLocation(context);
+    if (locData == null) {
+      isLocationError = true;
+      notifyListeners();
+      return;
+    }
+
+    try {
+      currentLocation = LatLng(locData.latitude, locData.longitude);
+      await getCurrentWeather(currentLocation!);
+      await getDailyWeather(currentLocation!);
+    } catch (e) {
+      print(e);
+      isLocationError = true;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> getCurrentWeather(LatLng location) async {
