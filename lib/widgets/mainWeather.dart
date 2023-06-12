@@ -27,7 +27,7 @@ class MainWeather extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(Icons.location_on_outlined),
-                Text('${weatherProv.weather.cityName}', style: _style1),
+                Text('${weatherProv.weather!.cityName}', style: _style1),
               ],
             ),
             const SizedBox(height: 5.0),
@@ -40,13 +40,12 @@ class MainWeather extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 MapString.mapStringToIcon(
-                  context,
-                  '${weatherProv.weather.currently}',
+                  '${weatherProv.weather!.currently}',
                   55,
                 ),
                 const SizedBox(width: 16.0),
                 Text(
-                  '${weatherProv.weather.temp.toStringAsFixed(0)}°C',
+                  '${weatherProv.weather!.temp.toStringAsFixed(0)}°C',
                   style: TextStyle(
                     fontSize: 55,
                     fontWeight: FontWeight.w600,
@@ -56,12 +55,13 @@ class MainWeather extends StatelessWidget {
             ),
             const SizedBox(height: 10.0),
             Text(
-              '${weatherProv.weather.tempMax.toStringAsFixed(0)}°/ ${weatherProv.weather.tempMin.toStringAsFixed(0)}° Feels like ${weatherProv.weather.feelsLike.toStringAsFixed(0)}°',
+              '${weatherProv.weather!.tempMax.toStringAsFixed(0)}°/ ${weatherProv.weather!.tempMin.toStringAsFixed(0)}° Feels like ${weatherProv.weather!.feelsLike.toStringAsFixed(0)}°',
               style: _style1.copyWith(fontSize: 19),
             ),
             const SizedBox(height: 5.0),
             Text(
-              toBeginningOfSentenceCase('${weatherProv.weather.description}') ??
+              toBeginningOfSentenceCase(
+                      '${weatherProv.weather!.description}') ??
                   '',
               style: _style1.copyWith(fontSize: 19),
             ),

@@ -22,13 +22,10 @@ class _SearchBarState extends State<SearchBar> {
   Widget build(BuildContext context) {
     return Consumer<WeatherProvider>(builder: (context, weatherProv, _) {
       return Container(
-        margin: EdgeInsets.symmetric(
-          vertical: 25,
-          horizontal: MediaQuery.of(context).size.width * .05,
-        ),
+        margin: const EdgeInsets.symmetric(vertical: 24.0, horizontal: 16.0),
         child: Material(
-          elevation: 5,
-          borderRadius: BorderRadius.circular(15),
+          elevation: 2,
+          borderRadius: BorderRadius.circular(16.0),
           color: Colors.white,
           child: TextField(
             enabled: !weatherProv.isLoading,
@@ -36,6 +33,18 @@ class _SearchBarState extends State<SearchBar> {
             maxLines: 1,
             controller: _textController,
             decoration: InputDecoration(
+              hintText: 'Search Location',
+              suffixIcon: _textController.text.isEmpty
+                  ? null
+                  : InkWell(
+                      radius: 4.0,
+                      onTap: () {
+                        setState(() {
+                          _textController.clear();
+                        });
+                      },
+                      child: Icon(Icons.close, color: Colors.blue),
+                    ),
               hintStyle: TextStyle(color: Colors.grey),
               errorText: _validate ? null : null,
               border: InputBorder.none,
@@ -49,20 +58,18 @@ class _SearchBarState extends State<SearchBar> {
                 ),
               ),
               contentPadding: EdgeInsets.only(
-                left: 0,
-                bottom: 11,
-                top: 11,
-                right: 15,
+                top: _textController.text.isEmpty ? 12.0 : 14.0,
+                bottom: _textController.text.isEmpty ? 12.0 : 0.0,
               ),
-              hintText: "Search Location",
             ),
-            onSubmitted: (value) {
+            onChanged: (value) => setState(() {}),
+            onSubmitted: (query) {
               setState(() {
                 _textController.text.isEmpty
                     ? _validate = true
-                    : Provider.of<WeatherProvider>(context, listen: false)
-                        .searchWeather(location: value);
+                    : weatherProv.searchWeather(query);
               });
+              FocusScope.of(context).unfocus();
             },
           ),
         ),

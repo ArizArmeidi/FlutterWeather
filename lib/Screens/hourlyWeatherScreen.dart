@@ -38,7 +38,7 @@ class HourlyScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 16.0),
-              MapString.mapStringToIcon(context, weather.condition, 25),
+              MapString.mapStringToIcon(weather.condition, 25),
             ],
           ),
         ),

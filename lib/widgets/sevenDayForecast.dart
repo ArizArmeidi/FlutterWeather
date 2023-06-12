@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/models/dailyWeather.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -6,10 +7,10 @@ import 'package:provider/provider.dart';
 import '../helper/utils.dart';
 
 class SevenDayForecast extends StatelessWidget {
-  Widget dailyWidget(dynamic weather, BuildContext context) {
-    final dayOfWeek = DateFormat('EEE').format(weather.date);
+  Widget dailyWidget(DailyWeather weather) {
+    final dayOfWeek = DateFormat('EEE').format(weather.date!);
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 7),
+      margin: const EdgeInsets.only(right: 8.0),
       child: Column(
         children: [
           FittedBox(
@@ -22,13 +23,10 @@ class SevenDayForecast extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.fromLTRB(5, 5, 5, 20),
-            child:
-                MapString.mapStringToIcon(context, '${weather.condition}', 35),
+            padding: const EdgeInsets.all(8.0),
+            child: MapString.mapStringToIcon('${weather.condition}', 35),
           ),
-          Text(
-            '${weather.condition}',
-          ),
+          Text('${weather.condition}'),
         ],
       ),
     );
@@ -50,65 +48,72 @@ class SevenDayForecast extends StatelessWidget {
           ),
         ),
         Container(
-          margin: const EdgeInsets.all(15.0),
+          margin: const EdgeInsets.all(16.0),
           child: Material(
             elevation: 5,
             borderRadius: BorderRadius.circular(15),
             color: Colors.white,
-            child: ListView(
-              padding: const EdgeInsets.all(25.0),
-              shrinkWrap: true,
-              children: [
+            child:
                 Consumer<WeatherProvider>(builder: (context, weatherProv, _) {
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Today',
-                            style: TextStyle(
-                              fontSize: 15,
+              return Column(
+                children: [
+                  Consumer<WeatherProvider>(
+                    builder: (context, weatherProv, _) {
+                      return Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Today',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                Text(
+                                  '${weatherProv.weather!.temp.toStringAsFixed(1)}°',
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                MapString.mapInputToWeather(
+                                  context,
+                                  '${weatherProv.weather!.currently}',
+                                )
+                              ],
                             ),
-                          ),
-                          Text(
-                            '${weatherProv.weather.temp.toStringAsFixed(1)}°',
-                            style: TextStyle(
-                              fontSize: 30,
-                              fontWeight: FontWeight.w500,
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 20),
+                              child: MapString.mapStringToIcon(
+                                '${weatherProv.weather!.currently}',
+                                45,
+                              ),
                             ),
-                          ),
-                          MapString.mapInputToWeather(
-                            context,
-                            '${weatherProv.weather.currently}',
-                          )
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 20),
-                        child: MapString.mapStringToIcon(
-                          context,
-                          '${weatherProv.weather.currently}',
-                          45,
+                          ],
                         ),
-                      ),
-                    ],
-                  );
-                }),
-                SizedBox(height: 15),
-                Consumer<WeatherProvider>(builder: (context, weatherProv, _) {
-                  return SingleChildScrollView(
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      children: weatherProv.sevenDayWeather
-                          .map((item) => dailyWidget(item, context))
-                          .toList(),
+                      );
+                    },
+                  ),
+                  SizedBox(height: 8.0),
+                  SizedBox(
+                    height: 100.0,
+                    child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: weatherProv.sevenDayWeather.length,
+                      itemBuilder: (context, index) {
+                        DailyWeather weather =
+                            weatherProv.sevenDayWeather[index];
+                        return dailyWidget(weather);
+                      },
                     ),
-                  );
-                }),
-              ],
-            ),
+                  ),
+                ],
+              );
+            }),
           ),
         ),
       ],

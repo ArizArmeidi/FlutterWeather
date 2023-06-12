@@ -56,12 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: Consumer<WeatherProvider>(
           builder: (context, weatherProv, _) {
-            if (weatherProv.isLocationError) {
-              return LocationError();
-            }
-            if (weatherProv.isRequestError) {
-              return RequestError();
-            }
+            if (weatherProv.isRequestError) return RequestError();
+            if (weatherProv.isLocationError) return LocationError();
             return Column(
               children: [
                 SearchBar(),

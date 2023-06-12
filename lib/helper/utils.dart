@@ -81,11 +81,7 @@ class MapString {
     );
   }
 
-  static Icon mapStringToIcon(
-    BuildContext context,
-    String input,
-    double iconSize,
-  ) {
+  static Icon mapStringToIcon(String input, double iconSize) {
     IconData icon;
     switch (input) {
       case 'Thunderstorm':
@@ -130,10 +126,6 @@ class MapString {
       default:
         icon = MdiIcons.weatherCloudy;
     }
-    return Icon(
-      icon,
-      size: iconSize,
-      color: Theme.of(context).primaryColor,
-    );
+    return Icon(icon, size: iconSize, color: Colors.blue);
   }
 }

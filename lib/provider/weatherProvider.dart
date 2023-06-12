@@ -12,7 +12,7 @@ import '../models/weather.dart';
 class WeatherProvider with ChangeNotifier {
   String apiKey = 'Paste Your API Key Here';
   LatLng? currentLocation;
-  late Weather weather;
+  Weather? weather;
   DailyWeather currentWeather = DailyWeather();
   List<DailyWeather> hourlyWeather = [];
   List<DailyWeather> hourly24Weather = [];
@@ -53,8 +53,8 @@ class WeatherProvider with ChangeNotifier {
       weather = Weather.fromJson(extractedData);
     } catch (error) {
       print(error);
+      isLoading = false;
       this.isRequestError = true;
-      throw error;
     } finally {
       isLoading = false;
       notifyListeners();
@@ -73,36 +73,29 @@ class WeatherProvider with ChangeNotifier {
       inspect(response.body);
       final dailyData = json.decode(response.body) as Map<String, dynamic>;
       currentWeather = DailyWeather.fromJson(dailyData);
-      List<DailyWeather> tempHourly = [];
-      List<DailyWeather> temp24Hour = [];
-      List<DailyWeather> tempSevenDay = [];
       List items = dailyData['daily'];
       List itemsHourly = dailyData['hourly'];
-      tempHourly = itemsHourly
+      hourlyWeather = itemsHourly
           .map((item) => DailyWeather.fromHourlyJson(item))
           .toList()
           .skip(1)
           .take(3)
           .toList();
-      temp24Hour = itemsHourly
+      hourly24Weather = itemsHourly
           .map((item) => DailyWeather.fromHourlyJson(item))
           .toList()
           .skip(1)
           .take(24)
           .toList();
-      tempSevenDay = items
+      sevenDayWeather = items
           .map((item) => DailyWeather.fromDailyJson(item))
           .toList()
           .skip(1)
           .take(7)
           .toList();
-      hourlyWeather = tempHourly;
-      hourly24Weather = temp24Hour;
-      sevenDayWeather = tempSevenDay;
     } catch (error) {
       print(error);
       this.isRequestError = true;
-      throw error;
     } finally {
       isLoading = false;
       notifyListeners();
@@ -118,18 +111,25 @@ class WeatherProvider with ChangeNotifier {
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       weather = Weather.fromJson(extractedData);
     } catch (error) {
+      print(error);
       this.isRequestError = true;
-      throw error;
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 
-  Future<void> searchWeather({required String location}) async {
+  Future<void> searchWeather(String location) async {
     isLoading = true;
+    notifyListeners();
     isRequestError = false;
     isLocationError = false;
-    double latitude = weather.lat;
-    double longitude = weather.long;
     await searchWeatherWithLocation(location);
-    await getDailyWeather(LatLng(latitude, longitude));
+    if (weather == null) {
+      isRequestError = true;
+      notifyListeners();
+      return;
+    }
+    await getDailyWeather(LatLng(weather!.lat, weather!.long));
   }
 }
