@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class UvIndex {
   static String mapUviValueToString({required dynamic uvi}) {
@@ -85,46 +84,46 @@ class MapString {
     IconData icon;
     switch (input) {
       case 'Thunderstorm':
-        icon = MdiIcons.weatherLightningRainy;
+        icon = Icons.ac_unit;
         break;
       case 'Drizzle':
-        icon = MdiIcons.weatherPartlyRainy;
+        icon = Icons.ac_unit;
         break;
       case 'Rain':
-        icon = MdiIcons.weatherRainy;
+        icon = Icons.ac_unit;
         break;
       case 'Snow':
-        icon = MdiIcons.weatherSnowy;
+        icon = Icons.ac_unit;
         break;
       case 'Clear':
-        icon = MdiIcons.weatherSunny;
+        icon = Icons.ac_unit;
         break;
       case 'Clouds':
-        icon = MdiIcons.weatherCloudy;
+        icon = Icons.ac_unit;
         break;
       case 'Mist':
-        icon = MdiIcons.weatherFog;
+        icon = Icons.ac_unit;
         break;
       case 'fog':
-        icon = MdiIcons.weatherFog;
+        icon = Icons.ac_unit;
         break;
       case 'Smoke':
-        icon = MdiIcons.smoke;
+        icon = Icons.ac_unit;
         break;
       case 'Haze':
-        icon = MdiIcons.weatherHazy;
+        icon = Icons.ac_unit;
         break;
       case 'Dust':
       case 'Sand':
       case 'Ash':
-        icon = MdiIcons.weatherDust;
+        icon = Icons.ac_unit;
         break;
       case 'Squall':
       case 'Tornado':
-        icon = MdiIcons.weatherTornado;
+        icon = Icons.ac_unit;
         break;
       default:
-        icon = MdiIcons.weatherCloudy;
+        icon = Icons.ac_unit;
     }
     return Icon(icon, size: iconSize, color: Colors.blue);
   }

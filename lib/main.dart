@@ -22,9 +22,8 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           appBarTheme: AppBarTheme(
-            iconTheme: IconThemeData(
-              color: Colors.blue,
-            ),
+            backgroundColor: Colors.white,
+            iconTheme: IconThemeData(color: Colors.blue),
             elevation: 0,
           ),
           scaffoldBackgroundColor: Colors.white,
