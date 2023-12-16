@@ -6,6 +6,8 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class WeatherInfoHeader extends StatelessWidget {
+  static const double boxWidth = 52.0;
+  static const double boxHeight = 40.0;
   @override
   Widget build(BuildContext context) {
     return Consumer<WeatherProvider>(
@@ -69,8 +71,8 @@ class WeatherInfoHeader extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Container(
-                                    height: 42.0,
-                                    width: 42.0,
+                                    height: boxHeight,
+                                    width: boxWidth,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8.0),
@@ -78,8 +80,8 @@ class WeatherInfoHeader extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                    height: 42.0,
-                                    width: 42.0,
+                                    height: boxHeight,
+                                    width: boxWidth,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8.0),
@@ -95,8 +97,8 @@ class WeatherInfoHeader extends StatelessWidget {
                               child: Row(
                                 children: [
                                   Container(
-                                    height: 42.0,
-                                    width: 42.0,
+                                    height: boxHeight,
+                                    width: boxWidth,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8.0),
@@ -104,8 +106,8 @@ class WeatherInfoHeader extends StatelessWidget {
                                     ),
                                   ),
                                   Container(
-                                    height: 42.0,
-                                    width: 42.0,
+                                    height: boxHeight,
+                                    width: boxWidth,
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8.0),
@@ -121,12 +123,13 @@ class WeatherInfoHeader extends StatelessWidget {
                       child: Row(
                         children: [
                           Container(
-                            height: 42.0,
-                            width: 42.0,
+                            height: boxHeight,
+                            width: boxWidth,
                             alignment: Alignment.center,
                             child: Text(
                               '°C',
                               style: semiboldText.copyWith(
+                                fontSize: 16,
                                 color: weatherProv.isCelsius
                                     ? Colors.white
                                     : Colors.grey.shade600,
@@ -134,12 +137,13 @@ class WeatherInfoHeader extends StatelessWidget {
                             ),
                           ),
                           Container(
-                            height: 42.0,
-                            width: 42.0,
+                            height: boxHeight,
+                            width: boxWidth,
                             alignment: Alignment.center,
                             child: Text(
                               '°F',
                               style: semiboldText.copyWith(
+                                fontSize: 16,
                                 color: weatherProv.isCelsius
                                     ? Colors.grey.shade600
                                     : Colors.white,

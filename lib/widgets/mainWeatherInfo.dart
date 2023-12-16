@@ -41,10 +41,7 @@ class MainWeatherInfo extends StatelessWidget {
               ],
             ),
             Spacer(),
-            Placeholder(
-              fallbackHeight: 150,
-              fallbackWidth: 200,
-            )
+            Placeholder(fallbackHeight: 150, fallbackWidth: 200)
           ],
         ),
       );
