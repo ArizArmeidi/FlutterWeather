@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/widgets/WeatherInfoHeader.dart';
-import 'package:flutter_weather/widgets/mainWeather.dart';
+import 'package:flutter_weather/widgets/mainWeatherDetail.dart';
+import 'package:flutter_weather/widgets/mainWeatherInfo.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -28,8 +29,10 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.all(12.0),
         children: [
           WeatherInfoHeader(),
-          const SizedBox(height: 8.0),
+          const SizedBox(height: 16.0),
           MainWeatherInfo(),
+          const SizedBox(height: 16.0),
+          MainWeatherDetail(),
         ],
       ),
     );
