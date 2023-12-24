@@ -10,7 +10,7 @@ import '../models/dailyWeather.dart';
 import '../models/weather.dart';
 
 class WeatherProvider with ChangeNotifier {
-  String apiKey = 'Paste Your API Key Here';
+  String apiKey = '2cbccae0488a4e4ee8ff9bf959514332';
   LatLng? currentLocation;
   Weather? weather;
   DailyWeather currentWeather = DailyWeather();
@@ -23,6 +23,7 @@ class WeatherProvider with ChangeNotifier {
   bool isLocationError = false;
   bool serviceEnabled = false;
   LocationPermission? permission;
+  bool isCelsius = true;
 
   Future<Position>? requestLocation(BuildContext context) async {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -173,5 +174,10 @@ class WeatherProvider with ChangeNotifier {
       return;
     }
     await getDailyWeather(LatLng(weather!.lat, weather!.long));
+  }
+
+  void switchTempUnit() {
+    isCelsius = !isCelsius;
+    notifyListeners();
   }
 }

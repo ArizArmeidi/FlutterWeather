@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/widgets/WeatherInfoHeader.dart';
 import 'package:flutter_weather/widgets/mainWeatherDetail.dart';
 import 'package:flutter_weather/widgets/mainWeatherInfo.dart';
+import 'package:flutter_weather/widgets/twentyFourHourForecast.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -33,6 +34,8 @@ class HomeScreen extends StatelessWidget {
           MainWeatherInfo(),
           const SizedBox(height: 16.0),
           MainWeatherDetail(),
+          const SizedBox(height: 16.0),
+          TwentyFourHourForecast(),
         ],
       ),
     );
