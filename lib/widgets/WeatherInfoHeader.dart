@@ -1,7 +1,9 @@
+import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/theme/colors.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
+import 'package:flutter_weather/widgets/customShimmer.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
@@ -13,37 +15,44 @@ class WeatherInfoHeader extends StatelessWidget {
     return Consumer<WeatherProvider>(
       builder: (context, weatherProv, _) {
         return Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                FittedBox(
-                  child: RichText(
-                    textAlign: TextAlign.start,
-                    text: TextSpan(
-                      text: 'City, ',
-                      style: semiboldText,
-                      children: [
-                        TextSpan(
-                          text: 'Country',
-                          style: regularText.copyWith(fontSize: 18.0),
+            weatherProv.isLoading
+                ? Expanded(
+                    child: CustomShimmer(height: 48.0),
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      FittedBox(
+                        child: RichText(
+                          textAlign: TextAlign.start,
+                          text: TextSpan(
+                            text: weatherProv.weather.city + ', ',
+                            style: semiboldText,
+                            children: [
+                              TextSpan(
+                                text: Country.tryParse(
+                                        weatherProv.weather.countryCode)
+                                    ?.name,
+                                style: regularText.copyWith(fontSize: 18.0),
+                              ),
+                            ],
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 4.0),
+                      FittedBox(
+                        child: Text(
+                          DateFormat('EEEE MMM dd, y  hh:mm a')
+                              .format(DateTime.now()),
+                          style:
+                              regularText.copyWith(color: Colors.grey.shade700),
+                        ),
+                      )
+                    ],
                   ),
-                ),
-                const SizedBox(height: 4.0),
-                FittedBox(
-                  child: Text(
-                    DateFormat('EEEE MMM dd, y  hh:mm a')
-                        .format(DateTime.now()),
-                    style: regularText.copyWith(color: Colors.grey.shade700),
-                  ),
-                )
-              ],
-            ),
-            Spacer(),
+            const SizedBox(width: 8.0),
             ClipRRect(
               borderRadius: BorderRadius.circular(12.0),
               child: Container(
@@ -76,7 +85,9 @@ class WeatherInfoHeader extends StatelessWidget {
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8.0),
-                                      color: primaryBlue,
+                                      color: weatherProv.isLoading
+                                          ? Colors.grey
+                                          : primaryBlue,
                                     ),
                                   ),
                                   Container(
@@ -90,7 +101,9 @@ class WeatherInfoHeader extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              onTap: () => weatherProv.switchTempUnit(),
+                              onTap: () => weatherProv.isLoading
+                                  ? null
+                                  : weatherProv.switchTempUnit(),
                             )
                           : GestureDetector(
                               key: ValueKey<int>(1),
@@ -111,7 +124,9 @@ class WeatherInfoHeader extends StatelessWidget {
                                     alignment: Alignment.center,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(8.0),
-                                      color: primaryBlue,
+                                      color: weatherProv.isLoading
+                                          ? Colors.grey
+                                          : primaryBlue,
                                     ),
                                   ),
                                 ],

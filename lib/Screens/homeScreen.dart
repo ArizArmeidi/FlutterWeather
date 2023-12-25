@@ -1,13 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/widgets/WeatherInfoHeader.dart';
 import 'package:flutter_weather/widgets/mainWeatherDetail.dart';
 import 'package:flutter_weather/widgets/mainWeatherInfo.dart';
 import 'package:flutter_weather/widgets/sevenDayForecast.dart';
 import 'package:flutter_weather/widgets/twentyFourHourForecast.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    requestWeather();
+  }
+
+  Future<void> requestWeather() async {
+    await Provider.of<WeatherProvider>(context, listen: false)
+        .getWeatherData(context);
+  }
 
   @override
   Widget build(BuildContext context) {

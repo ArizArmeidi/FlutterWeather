@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/cupertino.dart';
 
 class Weather with ChangeNotifier {
@@ -12,7 +13,8 @@ class Weather with ChangeNotifier {
   final String currently;
   final int humidity;
   final double windSpeed;
-  final String cityName;
+  final String city;
+  final String countryCode;
 
   Weather({
     required this.temp,
@@ -26,7 +28,8 @@ class Weather with ChangeNotifier {
     required this.currently,
     required this.humidity,
     required this.windSpeed,
-    required this.cityName,
+    required this.city,
+    required this.countryCode,
   });
 
   factory Weather.fromJson(Map<String, dynamic> json) {
@@ -42,7 +45,8 @@ class Weather with ChangeNotifier {
       currently: json['weather'][0]['main'],
       humidity: json['main']['humidity'],
       windSpeed: (json['wind']['speed']).toDouble(),
-      cityName: json['name'],
+      city: json['name'],
+      countryCode: json['sys']['country'],
     );
   }
 }

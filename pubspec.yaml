@@ -23,17 +23,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  country_picker: ^2.0.20
   cupertino_icons: ^1.0.0
   google_fonts: ^6.1.0
+  geolocator: ^9.0.2
   http: ^1.1.0
   intl: ^0.18.0
-  provider: ^6.0.5
-  geolocator: ^9.0.2
-  phosphor_flutter: ^2.0.1
   latlong2: ^0.8.1
-  supercharged: ^2.1.1
-  # smooth_page_indicator: ^1.0.0+2
+  phosphor_flutter: ^2.0.1
+  provider: ^6.0.5
+  shimmer: ^3.0.0
   simple_animations: ^5.0.0+3
+  supercharged: ^2.1.1
   
 
 dev_dependencies:
