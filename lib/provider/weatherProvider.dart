@@ -10,9 +10,9 @@ import '../models/dailyWeather.dart';
 import '../models/weather.dart';
 
 class WeatherProvider with ChangeNotifier {
-  String apiKey = '2cbccae0488a4e4ee8ff9bf959514332';
+  String apiKey = 'Enter Your API key';
+  late Weather weather;
   LatLng? currentLocation;
-  Weather? weather;
   DailyWeather currentWeather = DailyWeather();
   List<DailyWeather> hourlyWeather = [];
   List<DailyWeather> hourly24Weather = [];
@@ -59,12 +59,12 @@ class WeatherProvider with ChangeNotifier {
 
   Future<void> getWeatherData(
     BuildContext context, {
-    bool isRefresh = false,
+    bool notify = false,
   }) async {
     isLoading = true;
     isRequestError = false;
     isLocationError = false;
-    if (isRefresh) notifyListeners();
+    if (notify) notifyListeners();
 
     Position? locData = await requestLocation(context);
     if (locData == null) {
@@ -76,7 +76,7 @@ class WeatherProvider with ChangeNotifier {
     try {
       currentLocation = LatLng(locData.latitude, locData.longitude);
       await getCurrentWeather(currentLocation!);
-      await getDailyWeather(currentLocation!);
+      // await getDailyWeather(currentLocation!);
     } catch (e) {
       print(e);
       isLocationError = true;
@@ -94,6 +94,7 @@ class WeatherProvider with ChangeNotifier {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       weather = Weather.fromJson(extractedData);
+      print('Fetched Weather for: ${weather.city}/${weather.countryCode}');
     } catch (error) {
       print(error);
       isLoading = false;
@@ -163,17 +164,17 @@ class WeatherProvider with ChangeNotifier {
   }
 
   Future<void> searchWeather(String location) async {
-    isLoading = true;
-    notifyListeners();
-    isRequestError = false;
-    isLocationError = false;
-    await searchWeatherWithLocation(location);
-    if (weather == null) {
-      isRequestError = true;
-      notifyListeners();
-      return;
-    }
-    await getDailyWeather(LatLng(weather!.lat, weather!.long));
+    // isLoading = true;
+    // notifyListeners();
+    // isRequestError = false;
+    // isLocationError = false;
+    // await searchWeatherWithLocation(location);
+    // if (weather == null) {
+    //   isRequestError = true;
+    //   notifyListeners();
+    //   return;
+    // }
+    // await getDailyWeather(LatLng(weather!.lat, weather!.long));
   }
 
   void switchTempUnit() {
