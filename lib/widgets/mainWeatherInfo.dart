@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/helper/extensions.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
 import 'package:provider/provider.dart';
@@ -20,9 +21,11 @@ class MainWeatherInfo extends StatelessWidget {
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        '23',
-                        style: boldText.copyWith(fontSize: 86),
+                      FittedBox(
+                        child: Text(
+                          weatherProv.weather.temp.toStringAsFixed(1),
+                          style: boldText.copyWith(fontSize: 86),
+                        ),
                       ),
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
@@ -35,13 +38,13 @@ class MainWeatherInfo extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  'Weather Condition',
+                  weatherProv.weather.description.toTitleCase(),
                   style: lightText.copyWith(fontSize: 16),
                 )
               ],
             ),
             Spacer(),
-            Placeholder(fallbackHeight: 150, fallbackWidth: 200)
+            Placeholder(fallbackHeight: 150, fallbackWidth: 150)
           ],
         ),
       );
