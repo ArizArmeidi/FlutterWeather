@@ -1,16 +1,25 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
+import 'package:flutter_weather/widgets/customShimmer.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
 import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/theme/colors.dart';
 
+import '../helper/utils.dart';
+
 class MainWeatherDetail extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<WeatherProvider>(builder: (context, weatherProv, _) {
+      if (weatherProv.isLoading) {
+        return CustomShimmer(
+          height: 132.0,
+          borderRadius: BorderRadius.circular(16.0),
+        );
+      }
       return Container(
         padding: const EdgeInsets.symmetric(vertical: 8.0),
         decoration: BoxDecoration(
@@ -31,7 +40,8 @@ class MainWeatherDetail extends StatelessWidget {
                         color: Colors.white,
                       ),
                       title: 'Feels Like',
-                      data: '18C',
+                      data: weatherProv.weather.feelsLike.toStringAsFixed(1) +
+                          weatherProv.measurementUnit,
                     ),
                     VerticalDivider(
                       thickness: 1.0,
@@ -45,7 +55,8 @@ class MainWeatherDetail extends StatelessWidget {
                         color: Colors.white,
                       ),
                       title: 'Precipitation',
-                      data: '20%',
+                      data:
+                          '${weatherProv.additionalWeatherData.precipitation}%',
                     ),
                     VerticalDivider(
                       thickness: 1.0,
@@ -59,7 +70,9 @@ class MainWeatherDetail extends StatelessWidget {
                         color: Colors.white,
                       ),
                       title: 'UV Index',
-                      data: 'Low',
+                      data: uviValueToString(
+                        weatherProv.additionalWeatherData.uvi,
+                      ),
                     ),
                   ],
                 ),
@@ -80,7 +93,7 @@ class MainWeatherDetail extends StatelessWidget {
                         color: Colors.white,
                       ),
                       title: 'Wind',
-                      data: '20 km/h',
+                      data: '${weatherProv.weather.windSpeed} m/s',
                     ),
                     VerticalDivider(
                       thickness: 1.0,
@@ -94,7 +107,7 @@ class MainWeatherDetail extends StatelessWidget {
                         color: Colors.white,
                       ),
                       title: 'Humidity',
-                      data: '80%',
+                      data: '${weatherProv.weather.humidity}%',
                     ),
                     VerticalDivider(
                       thickness: 1.0,
@@ -104,11 +117,11 @@ class MainWeatherDetail extends StatelessWidget {
                     ),
                     DetailInfoTile(
                       icon: PhosphorIcon(
-                        PhosphorIconsRegular.cloudRain,
+                        PhosphorIconsRegular.cloud,
                         color: Colors.white,
                       ),
-                      title: 'Chance of Rain',
-                      data: '90%',
+                      title: 'Cloudiness',
+                      data: '${weatherProv.additionalWeatherData.clouds}%',
                     ),
                   ],
                 ),
@@ -138,10 +151,7 @@ class DetailInfoTile extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircleAvatar(
-            backgroundColor: primaryBlue,
-            child: icon,
-          ),
+          CircleAvatar(backgroundColor: primaryBlue, child: icon),
           const SizedBox(width: 8.0),
           Expanded(
             child: Column(
@@ -149,7 +159,16 @@ class DetailInfoTile extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 FittedBox(child: Text(title, style: lightText)),
-                FittedBox(child: Text(data, style: mediumText)),
+                FittedBox(
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minWidth: 1.0),
+                    child: Text(
+                      data,
+                      style: mediumText,
+                      maxLines: 1,
+                    ),
+                  ),
+                ),
               ],
             ),
           )

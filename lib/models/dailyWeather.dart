@@ -4,26 +4,16 @@ class DailyWeather with ChangeNotifier {
   final dynamic dailyTemp;
   final String? condition;
   final DateTime? date;
-  final String? precip;
+  final String? precipitation;
   final int? uvi;
 
   DailyWeather({
     this.dailyTemp,
     this.condition,
     this.date,
-    this.precip,
+    this.precipitation,
     this.uvi,
   });
-
-  factory DailyWeather.fromJson(Map<String, dynamic> json) {
-    final precipData = json['daily'][0]['pop'];
-    final calcPrecip = precipData * 100;
-    final precipitation = calcPrecip.toStringAsFixed(0);
-    return DailyWeather(
-      precip: precipitation,
-      uvi: (json['daily'][0]['uvi']).toInt(),
-    );
-  }
 
   static DailyWeather fromDailyJson(dynamic json) {
     return DailyWeather(

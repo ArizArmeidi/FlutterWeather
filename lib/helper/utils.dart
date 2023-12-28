@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
 
-class UvIndex {
-  static String mapUviValueToString({required dynamic uvi}) {
-    String uvIndex;
-    if (uvi <= 2) {
-      return uvIndex = 'Low';
-    } else if (uvi <= 5) {
-      return uvIndex = 'Medium';
-    } else if (uvi <= 7) {
-      return uvIndex = 'High';
-    } else if (uvi <= 10) {
-      return uvIndex = 'Very High';
-    } else if (uvi >= 11) {
-      return uvIndex = 'Extreme';
-    } else {
-      uvIndex = 'Unknown';
-    }
-    return uvIndex;
+String uviValueToString(int uvi) {
+  if (uvi <= 2) {
+  } else if (uvi <= 5) {
+    return 'Medium';
+  } else if (uvi <= 7) {
+    return 'High';
+  } else if (uvi <= 10) {
+    return 'Very High';
+  } else if (uvi >= 11) {
+    return 'Extreme';
   }
+  return 'Unknown';
 }
 
 class MapString {

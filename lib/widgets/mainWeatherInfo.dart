@@ -4,10 +4,30 @@ import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
 import 'package:provider/provider.dart';
 
+import 'customShimmer.dart';
+
 class MainWeatherInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<WeatherProvider>(builder: (context, weatherProv, _) {
+      if (weatherProv.isLoading) {
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Expanded(
+              child: CustomShimmer(
+                height: 148.0,
+                width: 148.0,
+              ),
+            ),
+            const SizedBox(width: 16.0),
+            CustomShimmer(
+              height: 148.0,
+              width: 148.0,
+            ),
+          ],
+        );
+      }
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Row(
@@ -30,7 +50,7 @@ class MainWeatherInfo extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.only(top: 8.0),
                         child: Text(
-                          '°C',
+                          weatherProv.measurementUnit,
                           style: mediumText.copyWith(fontSize: 26),
                         ),
                       ),

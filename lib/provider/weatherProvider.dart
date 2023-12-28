@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/models/additionalWeatherData.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
@@ -12,8 +12,8 @@ import '../models/weather.dart';
 class WeatherProvider with ChangeNotifier {
   String apiKey = 'Enter Your API key';
   late Weather weather;
+  late AdditionalWeatherData additionalWeatherData;
   LatLng? currentLocation;
-  DailyWeather currentWeather = DailyWeather();
   List<DailyWeather> hourlyWeather = [];
   List<DailyWeather> hourly24Weather = [];
   List<DailyWeather> fiveDayWeather = [];
@@ -24,6 +24,8 @@ class WeatherProvider with ChangeNotifier {
   bool serviceEnabled = false;
   LocationPermission? permission;
   bool isCelsius = true;
+
+  String get measurementUnit => isCelsius ? '°C' : '°F';
 
   Future<Position>? requestLocation(BuildContext context) async {
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -76,7 +78,7 @@ class WeatherProvider with ChangeNotifier {
     try {
       currentLocation = LatLng(locData.latitude, locData.longitude);
       await getCurrentWeather(currentLocation!);
-      // await getDailyWeather(currentLocation!);
+      await getDailyWeather(currentLocation!);
     } catch (e) {
       print(e);
       isLocationError = true;
@@ -99,9 +101,6 @@ class WeatherProvider with ChangeNotifier {
       print(error);
       isLoading = false;
       this.isRequestError = true;
-    } finally {
-      isLoading = false;
-      notifyListeners();
     }
   }
 
@@ -114,9 +113,8 @@ class WeatherProvider with ChangeNotifier {
     );
     try {
       final response = await http.get(dailyUrl);
-      inspect(response.body);
       final dailyData = json.decode(response.body) as Map<String, dynamic>;
-      currentWeather = DailyWeather.fromJson(dailyData);
+      additionalWeatherData = AdditionalWeatherData.fromJson(dailyData);
       List items = dailyData['daily'];
       List itemsHourly = dailyData['hourly'];
       hourlyWeather = itemsHourly
@@ -139,10 +137,8 @@ class WeatherProvider with ChangeNotifier {
           .toList();
     } catch (error) {
       print(error);
-      this.isRequestError = true;
-    } finally {
       isLoading = false;
-      notifyListeners();
+      this.isRequestError = true;
     }
   }
 
