@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/models/dailyWeather.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/theme/colors.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
+import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -32,9 +34,12 @@ class TwentyFourHourForecast extends StatelessWidget {
               height: 128.0,
               child: ListView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                itemCount: 10,
                 scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) => HourlyWeather(index),
+                itemCount: weatherProv.hourlyWeather.length,
+                itemBuilder: (context, index) => HourlyWeather(
+                  index: index,
+                  data: weatherProv.hourlyWeather[index],
+                ),
               ),
             );
           }),
@@ -46,7 +51,12 @@ class TwentyFourHourForecast extends StatelessWidget {
 
 class HourlyWeather extends StatelessWidget {
   final int index;
-  const HourlyWeather(this.index, {Key? key}) : super(key: key);
+  final DailyWeather data;
+  const HourlyWeather({
+    Key? key,
+    required this.index,
+    required this.data,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +65,7 @@ class HourlyWeather extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            '99',
+            data.temp.toStringAsFixed(1) + '°',
             style: semiboldText,
           ),
           Stack(
@@ -86,12 +96,12 @@ class HourlyWeather extends StatelessWidget {
             color: primaryBlue,
           ),
           Text(
-            'Time',
+            data.condition ?? '',
             style: lightText,
           ),
           const SizedBox(height: 2.0),
           Text(
-            'Time',
+            DateFormat('HH:mm a').format(data.date),
             style: regularText,
           )
         ],
