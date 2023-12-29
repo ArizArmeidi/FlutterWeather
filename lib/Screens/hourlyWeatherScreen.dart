@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:provider/provider.dart';
 
 import '../helper/utils.dart';
-import '../provider/weatherProvider.dart';
 
 class HourlyScreen extends StatelessWidget {
   static const routeName = '/hourlyScreen';
@@ -48,8 +46,8 @@ class HourlyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final weatherData = Provider.of<WeatherProvider>(context);
-    final mediaQuery = MediaQuery.of(context);
+    // final weatherData = Provider.of<WeatherProvider>(context);
+    // final mediaQuery = MediaQuery.of(context);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -60,16 +58,16 @@ class HourlyScreen extends StatelessWidget {
             style: TextStyle(color: Colors.black),
           ),
         ),
-        body: Container(
-          height: mediaQuery.size.height,
-          width: mediaQuery.size.width,
-          child: ListView(
-            physics: BouncingScrollPhysics(),
-            children: weatherData.hourly24Weather
-                .map((item) => dailyWidget(item, context))
-                .toList(),
-          ),
-        ),
+        // body: Container(
+        //   height: mediaQuery.size.height,
+        //   width: mediaQuery.size.width,
+        //   child: ListView(
+        //     physics: BouncingScrollPhysics(),
+        //     children: weatherData.hourly24Weather
+        //         .map((item) => dailyWidget(item, context))
+        //         .toList(),
+        //   ),
+        // ),
       ),
     );
   }
