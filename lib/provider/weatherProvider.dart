@@ -10,12 +10,11 @@ import '../models/dailyWeather.dart';
 import '../models/weather.dart';
 
 class WeatherProvider with ChangeNotifier {
-  String apiKey = 'Enter Your API key';
+  String apiKey = 'Enter Your API Key';
   late Weather weather;
   late AdditionalWeatherData additionalWeatherData;
   LatLng? currentLocation;
   List<DailyWeather> hourlyWeather = [];
-  List<DailyWeather> hourly24Weather = [];
   List<DailyWeather> fiveDayWeather = [];
   List<DailyWeather> sevenDayWeather = [];
   bool isLoading = false;
@@ -115,21 +114,14 @@ class WeatherProvider with ChangeNotifier {
       final response = await http.get(dailyUrl);
       final dailyData = json.decode(response.body) as Map<String, dynamic>;
       additionalWeatherData = AdditionalWeatherData.fromJson(dailyData);
-      List items = dailyData['daily'];
-      List itemsHourly = dailyData['hourly'];
-      hourlyWeather = itemsHourly
+      List dailyList = dailyData['daily'];
+      List hourlyList = dailyData['hourly'];
+      hourlyWeather = hourlyList
           .map((item) => DailyWeather.fromHourlyJson(item))
           .toList()
-          .skip(1)
-          .take(3)
-          .toList();
-      hourly24Weather = itemsHourly
-          .map((item) => DailyWeather.fromHourlyJson(item))
-          .toList()
-          .skip(1)
           .take(24)
           .toList();
-      sevenDayWeather = items
+      sevenDayWeather = dailyList
           .map((item) => DailyWeather.fromDailyJson(item))
           .toList()
           .skip(1)
