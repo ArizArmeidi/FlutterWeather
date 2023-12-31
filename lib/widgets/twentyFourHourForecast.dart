@@ -3,6 +3,7 @@ import 'package:flutter_weather/models/dailyWeather.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/theme/colors.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
+import 'package:flutter_weather/widgets/customShimmer.dart';
 import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +31,23 @@ class TwentyFourHourForecast extends StatelessWidget {
             ),
           ),
           Consumer<WeatherProvider>(builder: (context, weatherProv, _) {
+            if (weatherProv.isLoading) {
+              return SizedBox(
+                height: 128.0,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  physics: NeverScrollableScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  itemCount: 10,
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 12.0),
+                  itemBuilder: (context, index) => CustomShimmer(
+                    height: 128.0,
+                    width: 64.0,
+                  ),
+                ),
+              );
+            }
             return SizedBox(
               height: 128.0,
               child: ListView.builder(
