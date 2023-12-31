@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 
 import '../models/dailyWeather.dart';
+import '../models/hourlyWeather.dart';
 import '../models/weather.dart';
 
 class WeatherProvider with ChangeNotifier {
@@ -14,8 +15,7 @@ class WeatherProvider with ChangeNotifier {
   late Weather weather;
   late AdditionalWeatherData additionalWeatherData;
   LatLng? currentLocation;
-  List<DailyWeather> hourlyWeather = [];
-  List<DailyWeather> fiveDayWeather = [];
+  List<HourlyWeather> hourlyWeather = [];
   List<DailyWeather> sevenDayWeather = [];
   bool isLoading = false;
   bool isRequestError = false;
@@ -117,7 +117,7 @@ class WeatherProvider with ChangeNotifier {
       List dailyList = dailyData['daily'];
       List hourlyList = dailyData['hourly'];
       hourlyWeather = hourlyList
-          .map((item) => DailyWeather.fromHourlyJson(item))
+          .map((item) => HourlyWeather.fromJson(item))
           .toList()
           .take(24)
           .toList();
@@ -134,7 +134,7 @@ class WeatherProvider with ChangeNotifier {
     }
   }
 
-  Future<void> searchWeatherWithLocation(String location) async {
+  Future<void> _searchWeatherFromLocation(String location) async {
     Uri url = Uri.parse(
       'https://api.openweathermap.org/data/2.5/weather?q=$location&units=metric&appid=$apiKey',
     );
@@ -152,17 +152,17 @@ class WeatherProvider with ChangeNotifier {
   }
 
   Future<void> searchWeather(String location) async {
-    // isLoading = true;
-    // notifyListeners();
-    // isRequestError = false;
-    // isLocationError = false;
-    // await searchWeatherWithLocation(location);
-    // if (weather == null) {
-    //   isRequestError = true;
-    //   notifyListeners();
-    //   return;
-    // }
-    // await getDailyWeather(LatLng(weather!.lat, weather!.long));
+    isLoading = true;
+    notifyListeners();
+    isRequestError = false;
+    isLocationError = false;
+    try {
+      await _searchWeatherFromLocation(location);
+      await getDailyWeather(LatLng(weather.lat, weather.long));
+    } catch (e) {
+      isRequestError = true;
+      notifyListeners();
+    }
   }
 
   void switchTempUnit() {

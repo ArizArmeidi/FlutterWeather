@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_weather/models/dailyWeather.dart';
+import 'package:flutter_weather/models/hourlyWeather.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/theme/colors.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
@@ -54,7 +54,7 @@ class TwentyFourHourForecast extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 scrollDirection: Axis.horizontal,
                 itemCount: weatherProv.hourlyWeather.length,
-                itemBuilder: (context, index) => HourlyWeather(
+                itemBuilder: (context, index) => HourlyWeatherWidget(
                   index: index,
                   data: weatherProv.hourlyWeather[index],
                 ),
@@ -67,10 +67,10 @@ class TwentyFourHourForecast extends StatelessWidget {
   }
 }
 
-class HourlyWeather extends StatelessWidget {
+class HourlyWeatherWidget extends StatelessWidget {
   final int index;
-  final DailyWeather data;
-  const HourlyWeather({
+  final HourlyWeather data;
+  const HourlyWeatherWidget({
     Key? key,
     required this.index,
     required this.data,

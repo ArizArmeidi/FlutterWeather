@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/models/dailyWeather.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/theme/colors.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
+import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
@@ -43,39 +45,60 @@ class SevenDayForecast extends StatelessWidget {
             builder: (context, weatherProv, _) {
               return ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: 6,
+                itemCount: weatherProv.sevenDayWeather.length,
                 shrinkWrap: true,
-                itemBuilder: (context, index) => Container(
-                  padding: const EdgeInsets.all(12.0),
-                  decoration: BoxDecoration(
-                      color: index.isEven ? backgroundWhite : Colors.white,
-                      borderRadius: BorderRadius.circular(12.0)),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '$index',
-                        style: semiboldText,
-                      ),
-                      Column(
-                        children: [
-                          Placeholder(
-                            fallbackHeight: 24.0,
-                            fallbackWidth: 24.0,
+                itemBuilder: (context, index) {
+                  final DailyWeather weather =
+                      weatherProv.sevenDayWeather[index];
+                  return Container(
+                    padding: const EdgeInsets.all(12.0),
+                    decoration: BoxDecoration(
+                        color: index.isEven ? backgroundWhite : Colors.white,
+                        borderRadius: BorderRadius.circular(12.0)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.sizeOf(context).width / 4,
+                          child: FittedBox(
+                            alignment: Alignment.centerLeft,
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              DateFormat('EEEE').format(weather.date),
+                              style: semiboldText,
+                              maxLines: 1,
+                            ),
                           ),
-                          Text(
-                            'weather condition',
-                            style: lightText,
+                        ),
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Placeholder(
+                              fallbackHeight: 24.0,
+                              fallbackWidth: 24.0,
+                            ),
+                            const SizedBox(height: 4.0),
+                            Text(
+                              weather.condition ?? '',
+                              style: lightText,
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          width: MediaQuery.sizeOf(context).width / 4,
+                          child: FittedBox(
+                            alignment: Alignment.centerLeft,
+                            fit: BoxFit.scaleDown,
+                            child: Text(
+                              '${weather.tempMin.toStringAsFixed(1)}°/${weather.tempMax.toStringAsFixed(1)}°',
+                              style: semiboldText,
+                            ),
                           ),
-                        ],
-                      ),
-                      Text(
-                        '$index/$index',
-                        style: semiboldText,
-                      ),
-                    ],
-                  ),
-                ),
+                        ),
+                      ],
+                    ),
+                  );
+                },
               );
             },
           ),
