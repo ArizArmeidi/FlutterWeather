@@ -1,10 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'screens/hourlyWeatherScreen.dart';
 import './provider/weatherProvider.dart';
-import 'screens/weeklyWeatherScreen.dart';
 import 'screens/homeScreen.dart';
+import 'screens/sevenDayForecastScreen.dart';
 
 void main() {
   runApp(
@@ -33,9 +33,24 @@ class MyApp extends StatelessWidget {
               ColorScheme.fromSwatch().copyWith(secondary: Colors.white),
         ),
         home: HomeScreen(),
-        routes: {
-          WeeklyScreen.routeName: (ctx) => WeeklyScreen(),
-          HourlyScreen.routeName: (ctx) => HourlyScreen(),
+        // routes: {
+        //   WeeklyScreen.routeName: (ctx) => WeeklyScreen(),
+        // },
+        onGenerateRoute: (settings) {
+          if (settings.name == SevenDayForecastDetail.routeName) {
+            return PageRouteBuilder(
+              settings: settings,
+              pageBuilder: (_, __, ___) => SevenDayForecastDetail(),
+              transitionsBuilder: (ctx, a, b, c) => CupertinoPageTransition(
+                primaryRouteAnimation: a,
+                secondaryRouteAnimation: b,
+                linearTransition: false,
+                child: c,
+              ),
+            );
+          }
+          // Unknown route
+          return MaterialPageRoute(builder: (_) => HomeScreen());
         },
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/models/dailyWeather.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
+import 'package:flutter_weather/screens/sevenDayForecastScreen.dart';
 import 'package:flutter_weather/theme/colors.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
 import 'package:intl/intl.dart';
@@ -35,7 +36,10 @@ class SevenDayForecast extends StatelessWidget {
                   foregroundColor: primaryBlue,
                 ),
                 child: Text('more details ▶'),
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.of(context)
+                      .pushNamed(SevenDayForecastDetail.routeName);
+                },
               )
             ],
           ),
@@ -45,11 +49,10 @@ class SevenDayForecast extends StatelessWidget {
             builder: (context, weatherProv, _) {
               return ListView.builder(
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: weatherProv.sevenDayWeather.length,
+                itemCount: weatherProv.dailyWeather.length,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
-                  final DailyWeather weather =
-                      weatherProv.sevenDayWeather[index];
+                  final DailyWeather weather = weatherProv.dailyWeather[index];
                   return Container(
                     padding: const EdgeInsets.all(12.0),
                     decoration: BoxDecoration(
@@ -64,7 +67,9 @@ class SevenDayForecast extends StatelessWidget {
                             alignment: Alignment.centerLeft,
                             fit: BoxFit.scaleDown,
                             child: Text(
-                              DateFormat('EEEE').format(weather.date),
+                              index == 0
+                                  ? 'Today'
+                                  : DateFormat('EEEE').format(weather.date),
                               style: semiboldText,
                               maxLines: 1,
                             ),
@@ -85,12 +90,12 @@ class SevenDayForecast extends StatelessWidget {
                           ],
                         ),
                         SizedBox(
-                          width: MediaQuery.sizeOf(context).width / 4,
+                          width: MediaQuery.sizeOf(context).width / 5,
                           child: FittedBox(
                             alignment: Alignment.centerLeft,
                             fit: BoxFit.scaleDown,
                             child: Text(
-                              '${weather.tempMin.toStringAsFixed(1)}°/${weather.tempMax.toStringAsFixed(1)}°',
+                              '${weather.tempMax.toStringAsFixed(0)}°/${weather.tempMin.toStringAsFixed(0)}°',
                               style: semiboldText,
                             ),
                           ),

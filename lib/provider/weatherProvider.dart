@@ -16,7 +16,7 @@ class WeatherProvider with ChangeNotifier {
   late AdditionalWeatherData additionalWeatherData;
   LatLng? currentLocation;
   List<HourlyWeather> hourlyWeather = [];
-  List<DailyWeather> sevenDayWeather = [];
+  List<DailyWeather> dailyWeather = [];
   bool isLoading = false;
   bool isRequestError = false;
   bool isLocationError = false;
@@ -121,12 +121,8 @@ class WeatherProvider with ChangeNotifier {
           .toList()
           .take(24)
           .toList();
-      sevenDayWeather = dailyList
-          .map((item) => DailyWeather.fromDailyJson(item))
-          .toList()
-          .skip(1)
-          .take(7)
-          .toList();
+      dailyWeather =
+          dailyList.map((item) => DailyWeather.fromDailyJson(item)).toList();
     } catch (error) {
       print(error);
       isLoading = false;
