@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/helper/extensions.dart';
 import 'package:flutter_weather/models/hourlyWeather.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/theme/colors.dart';
@@ -8,11 +9,14 @@ import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../helper/utils.dart';
+
 class TwentyFourHourForecast extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: backgroundWhite,
+      decoration: BoxDecoration(
+          color: backgroundWhite, borderRadius: BorderRadius.circular(16.0)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -30,37 +34,41 @@ class TwentyFourHourForecast extends StatelessWidget {
               ],
             ),
           ),
-          Consumer<WeatherProvider>(builder: (context, weatherProv, _) {
-            if (weatherProv.isLoading) {
+          Consumer<WeatherProvider>(
+            builder: (context, weatherProv, _) {
+              if (weatherProv.isLoading) {
+                return SizedBox(
+                  height: 128.0,
+                  child: ListView.separated(
+                    scrollDirection: Axis.horizontal,
+                    physics: NeverScrollableScrollPhysics(),
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                    itemCount: 10,
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(width: 12.0),
+                    itemBuilder: (context, index) => CustomShimmer(
+                      height: 128.0,
+                      width: 64.0,
+                    ),
+                  ),
+                );
+              }
               return SizedBox(
                 height: 128.0,
-                child: ListView.separated(
+                child: ListView.builder(
+                  physics: BouncingScrollPhysics(),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   scrollDirection: Axis.horizontal,
-                  physics: NeverScrollableScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  itemCount: 10,
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(width: 12.0),
-                  itemBuilder: (context, index) => CustomShimmer(
-                    height: 128.0,
-                    width: 64.0,
+                  itemCount: weatherProv.hourlyWeather.length,
+                  itemBuilder: (context, index) => HourlyWeatherWidget(
+                    index: index,
+                    data: weatherProv.hourlyWeather[index],
                   ),
                 ),
               );
-            }
-            return SizedBox(
-              height: 128.0,
-              child: ListView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                scrollDirection: Axis.horizontal,
-                itemCount: weatherProv.hourlyWeather.length,
-                itemBuilder: (context, index) => HourlyWeatherWidget(
-                  index: index,
-                  data: weatherProv.hourlyWeather[index],
-                ),
-              ),
-            );
-          }),
+            },
+          ),
+          const SizedBox(height: 8.0),
         ],
       ),
     );
@@ -108,18 +116,21 @@ class HourlyWeatherWidget extends StatelessWidget {
                 )
             ],
           ),
-          Container(
+          SizedBox(
             height: 42.0,
             width: 42.0,
-            color: primaryBlue,
+            child: Image.asset(
+              getWeatherImage(data.weatherCategory),
+              fit: BoxFit.cover,
+            ),
           ),
           Text(
-            data.condition ?? '',
-            style: lightText,
+            data.condition?.toTitleCase() ?? '',
+            style: regularText.copyWith(fontSize: 12.0),
           ),
           const SizedBox(height: 2.0),
           Text(
-            DateFormat('HH:mm a').format(data.date),
+            index == 0 ? 'Now' : DateFormat('hh:mm a').format(data.date),
             style: regularText,
           )
         ],

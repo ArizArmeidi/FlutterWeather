@@ -5,7 +5,8 @@ class DailyWeather with ChangeNotifier {
   final double temp;
   final double tempMin;
   final double tempMax;
-  final String? condition;
+  final String weatherCategory;
+  final String condition;
   final DateTime date;
   final String? precipitation;
   final int? uvi;
@@ -14,7 +15,8 @@ class DailyWeather with ChangeNotifier {
     required this.temp,
     required this.tempMin,
     required this.tempMax,
-    this.condition,
+    required this.weatherCategory,
+    required this.condition,
     required this.date,
     this.precipitation,
     this.uvi,
@@ -25,7 +27,8 @@ class DailyWeather with ChangeNotifier {
       temp: (json['temp']['day']).toDouble(),
       tempMin: (json['temp']['min']).toDouble(),
       tempMax: (json['temp']['max']).toDouble(),
-      condition: json['weather'][0]['main'],
+      weatherCategory: json['weather'][0]['main'],
+      condition: json['weather'][0]['description'],
       date: DateTime.fromMillisecondsSinceEpoch(json['dt'] * 1000, isUtc: true),
     );
   }

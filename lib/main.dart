@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 
 import './provider/weatherProvider.dart';
 import 'screens/homeScreen.dart';
-import 'screens/sevenDayForecastScreen.dart';
+import 'screens/sevenDayForecastDetailScreen.dart';
 
 void main() {
   runApp(

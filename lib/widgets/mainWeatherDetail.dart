@@ -41,7 +41,7 @@ class MainWeatherDetail extends StatelessWidget {
                       ),
                       title: 'Feels Like',
                       data: weatherProv.weather.feelsLike.toStringAsFixed(1) +
-                          weatherProv.measurementUnit,
+                          '°',
                     ),
                     VerticalDivider(
                       thickness: 1.0,

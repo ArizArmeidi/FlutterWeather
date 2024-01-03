@@ -10,7 +10,7 @@ class Weather with ChangeNotifier {
   final double feelsLike;
   final int pressure;
   final String description;
-  final String currently;
+  final String weatherCategory;
   final int humidity;
   final double windSpeed;
   final String city;
@@ -25,7 +25,7 @@ class Weather with ChangeNotifier {
     required this.feelsLike,
     required this.pressure,
     required this.description,
-    required this.currently,
+    required this.weatherCategory,
     required this.humidity,
     required this.windSpeed,
     required this.city,
@@ -41,8 +41,8 @@ class Weather with ChangeNotifier {
       long: json['coord']['lon'],
       feelsLike: (json['main']['feels_like']).toDouble(),
       pressure: json['main']['pressure'],
+      weatherCategory: json['weather'][0]['main'],
       description: json['weather'][0]['description'],
-      currently: json['weather'][0]['main'],
       humidity: json['main']['humidity'],
       windSpeed: (json['wind']['speed']).toDouble(),
       city: json['name'],

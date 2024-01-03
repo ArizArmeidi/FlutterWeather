@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/helper/extensions.dart';
+import 'package:flutter_weather/helper/utils.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
 import 'package:provider/provider.dart';
@@ -64,7 +65,14 @@ class MainWeatherInfo extends StatelessWidget {
               ],
             ),
             Spacer(),
-            Placeholder(fallbackHeight: 150, fallbackWidth: 150)
+            SizedBox(
+              height: 148.0,
+              width: 148.0,
+              child: Image.asset(
+                getWeatherImage(weatherProv.weather.weatherCategory),
+                fit: BoxFit.cover,
+              ),
+            ),
           ],
         ),
       );

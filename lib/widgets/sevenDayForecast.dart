@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/models/dailyWeather.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
-import 'package:flutter_weather/screens/sevenDayForecastScreen.dart';
+import 'package:flutter_weather/screens/sevenDayForecastDetailScreen.dart';
 import 'package:flutter_weather/theme/colors.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
 import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
+
+import '../helper/utils.dart';
 
 class SevenDayForecast extends StatelessWidget {
   @override
@@ -78,13 +80,17 @@ class SevenDayForecast extends StatelessWidget {
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Placeholder(
-                              fallbackHeight: 24.0,
-                              fallbackWidth: 24.0,
+                            SizedBox(
+                              height: 36.0,
+                              width: 36.0,
+                              child: Image.asset(
+                                getWeatherImage(weather.weatherCategory),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                             const SizedBox(height: 4.0),
                             Text(
-                              weather.condition ?? '',
+                              weather.weatherCategory,
                               style: lightText,
                             ),
                           ],

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/theme/colors.dart';
 import 'package:intl/intl.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../helper/utils.dart';
 import '../models/dailyWeather.dart';
 import '../theme/textStyle.dart';
 
@@ -56,7 +56,7 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
                       decoration: BoxDecoration(
                         color: isSelected
                             ? backgroundBlue
-                            : backgroundBlue.withOpacity(.35),
+                            : backgroundBlue.withOpacity(.2),
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Column(
@@ -69,7 +69,14 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
                             style: mediumText,
                             maxLines: 1,
                           ),
-                          PhosphorIcon(PhosphorIconsBold.moon),
+                          SizedBox(
+                            height: 36.0,
+                            width: 36.0,
+                            child: Image.asset(
+                              getWeatherImage(weather.weatherCategory),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
                           FittedBox(
                             alignment: Alignment.centerLeft,
                             fit: BoxFit.scaleDown,
@@ -101,7 +108,7 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
                   style: boldText.copyWith(fontSize: 48.0, height: 1.15),
                 ),
                 Text(
-                  _selectedWeather.condition ?? '',
+                  _selectedWeather.weatherCategory,
                   style: semiboldText.copyWith(color: primaryBlue),
                 )
               ],
