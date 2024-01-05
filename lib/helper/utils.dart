@@ -1,4 +1,4 @@
-String uviValueToString(int uvi) {
+String uviValueToString(double uvi) {
   if (uvi <= 2) {
   } else if (uvi <= 5) {
     return 'Medium';

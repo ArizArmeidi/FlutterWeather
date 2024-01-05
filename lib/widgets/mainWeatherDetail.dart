@@ -147,7 +147,7 @@ class DetailInfoTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Flexible(
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -12,8 +12,10 @@ class DailyWeather with ChangeNotifier {
   final String weatherCategory;
   final String condition;
   final DateTime date;
-  final String? precipitation;
-  final int? uvi;
+  final String precipitation;
+  final double uvi;
+  final int clouds;
+  final int humidity;
 
   DailyWeather({
     required this.temp,
@@ -26,8 +28,10 @@ class DailyWeather with ChangeNotifier {
     required this.weatherCategory,
     required this.condition,
     required this.date,
-    this.precipitation,
-    this.uvi,
+    required this.precipitation,
+    required this.uvi,
+    required this.clouds,
+    required this.humidity,
   });
 
   static DailyWeather fromDailyJson(dynamic json) {
@@ -42,6 +46,10 @@ class DailyWeather with ChangeNotifier {
       weatherCategory: json['weather'][0]['main'],
       condition: json['weather'][0]['description'],
       date: DateTime.fromMillisecondsSinceEpoch(json['dt'] * 1000, isUtc: true),
+      precipitation: ((json['pop']).toDouble() * 100).toStringAsFixed(0),
+      clouds: json['clouds'],
+      humidity: json['humidity'],
+      uvi: (json['uvi']).toDouble(),
     );
   }
 }
