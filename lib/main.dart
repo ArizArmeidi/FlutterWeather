@@ -37,10 +37,13 @@ class MyApp extends StatelessWidget {
         //   WeeklyScreen.routeName: (ctx) => WeeklyScreen(),
         // },
         onGenerateRoute: (settings) {
+          final arguments = settings.arguments;
           if (settings.name == SevenDayForecastDetail.routeName) {
             return PageRouteBuilder(
               settings: settings,
-              pageBuilder: (_, __, ___) => SevenDayForecastDetail(),
+              pageBuilder: (_, __, ___) => SevenDayForecastDetail(
+                initialIndex: arguments == null ? 0 : arguments as int,
+              ),
               transitionsBuilder: (ctx, a, b, c) => CupertinoPageTransition(
                 primaryRouteAnimation: a,
                 secondaryRouteAnimation: b,

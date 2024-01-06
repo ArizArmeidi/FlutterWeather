@@ -1,7 +1,7 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/theme/colors.dart';
-import 'package:flutter_weather/widgets/mainWeatherDetail.dart';
 import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
@@ -12,6 +12,12 @@ import '../theme/textStyle.dart';
 
 class SevenDayForecastDetail extends StatefulWidget {
   static const routeName = '/sevenDayForecast';
+  final int initialIndex;
+
+  const SevenDayForecastDetail({
+    Key? key,
+    this.initialIndex = 0,
+  }) : super(key: key);
 
   @override
   State<SevenDayForecastDetail> createState() => _SevenDayForecastDetailState();
@@ -19,6 +25,28 @@ class SevenDayForecastDetail extends StatefulWidget {
 
 class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
   int _selectedIndex = 0;
+  late final ScrollController _scrollController;
+  static const double _itemWidth = 24.0;
+  static const double _horizontalPadding = 12.0;
+  static const double _selectedWidth = 24.0;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedIndex = widget.initialIndex;
+    _scrollController = ScrollController();
+    double _position = _selectedIndex * (_itemWidth + 2 * _horizontalPadding) +
+        (_selectedWidth + _horizontalPadding);
+    if (_selectedIndex > 1)
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _scrollController.animateTo(
+          _position,
+          duration: Duration(milliseconds: 250),
+          curve: Curves.ease,
+        );
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,12 +62,15 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
           DailyWeather _selectedWeather =
               weatherProv.dailyWeather[_selectedIndex];
           return ListView(
+            physics: BouncingScrollPhysics(),
             padding: EdgeInsets.symmetric(horizontal: 12.0),
             children: [
               const SizedBox(height: 12.0),
               SizedBox(
                 height: 98.0,
                 child: ListView.separated(
+                  physics: BouncingScrollPhysics(),
+                  controller: _scrollController,
                   separatorBuilder: (context, index) =>
                       const SizedBox(width: 8.0),
                   scrollDirection: Axis.horizontal,
@@ -153,6 +184,7 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
                       borderRadius: BorderRadius.circular(16.0),
                     ),
                     child: GridView(
+                      physics: NeverScrollableScrollPhysics(),
                       padding: EdgeInsets.zero,
                       shrinkWrap: true,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -162,7 +194,7 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
                         mainAxisSpacing: 8,
                       ),
                       children: [
-                        DetailInfoTile(
+                        _ForecastDetailInfoTile(
                           title: 'Cloudiness',
                           icon: PhosphorIcon(
                             PhosphorIconsRegular.cloud,
@@ -170,7 +202,7 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
                           ),
                           data: '${_selectedWeather.clouds}%',
                         ),
-                        DetailInfoTile(
+                        _ForecastDetailInfoTile(
                           title: 'UV Index',
                           icon: PhosphorIcon(
                             PhosphorIconsRegular.sun,
@@ -178,7 +210,7 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
                           ),
                           data: uviValueToString(_selectedWeather.uvi),
                         ),
-                        DetailInfoTile(
+                        _ForecastDetailInfoTile(
                           title: 'Precipitation',
                           icon: PhosphorIcon(
                             PhosphorIconsRegular.drop,
@@ -186,7 +218,7 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
                           ),
                           data: _selectedWeather.precipitation + '%',
                         ),
-                        DetailInfoTile(
+                        _ForecastDetailInfoTile(
                           title: 'Humidity',
                           icon: PhosphorIcon(
                             PhosphorIconsRegular.thermometerSimple,
@@ -218,6 +250,7 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
                       borderRadius: BorderRadius.circular(16.0),
                     ),
                     child: GridView(
+                      physics: NeverScrollableScrollPhysics(),
                       padding: EdgeInsets.zero,
                       shrinkWrap: true,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -227,7 +260,7 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
                         mainAxisSpacing: 8,
                       ),
                       children: [
-                        DetailInfoTile(
+                        _ForecastDetailInfoTile(
                           title: 'Morning Temp',
                           icon: PhosphorIcon(
                             PhosphorIconsRegular.thermometerSimple,
@@ -237,7 +270,7 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
                               _selectedWeather.tempMorning.toStringAsFixed(1) +
                                   '°',
                         ),
-                        DetailInfoTile(
+                        _ForecastDetailInfoTile(
                           title: 'Day Temp',
                           icon: PhosphorIcon(
                             PhosphorIconsRegular.thermometerSimple,
@@ -246,7 +279,7 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
                           data:
                               _selectedWeather.tempDay.toStringAsFixed(1) + '°',
                         ),
-                        DetailInfoTile(
+                        _ForecastDetailInfoTile(
                           title: 'Evening Temp',
                           icon: PhosphorIcon(
                             PhosphorIconsRegular.thermometerSimple,
@@ -256,7 +289,7 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
                               _selectedWeather.tempEvening.toStringAsFixed(1) +
                                   '°',
                         ),
-                        DetailInfoTile(
+                        _ForecastDetailInfoTile(
                           title: 'Night Temp',
                           icon: PhosphorIcon(
                             PhosphorIconsRegular.thermometerSimple,
@@ -274,6 +307,48 @@ class _SevenDayForecastDetailState extends State<SevenDayForecastDetail> {
           );
         },
       ),
+    );
+  }
+}
+
+class _ForecastDetailInfoTile extends StatelessWidget {
+  final String title;
+  final String data;
+  final Widget icon;
+  const _ForecastDetailInfoTile({
+    Key? key,
+    required this.title,
+    required this.data,
+    required this.icon,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CircleAvatar(backgroundColor: primaryBlue, child: icon),
+        const SizedBox(width: 8.0),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FittedBox(child: Text(title, style: lightText)),
+              FittedBox(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minWidth: 1.0),
+                  child: Text(
+                    data,
+                    style: mediumText,
+                    maxLines: 1,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+      ],
     );
   }
 }
