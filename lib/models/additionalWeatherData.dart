@@ -11,10 +11,9 @@ class AdditionalWeatherData {
 
   factory AdditionalWeatherData.fromJson(Map<String, dynamic> json) {
     final precipData = json['daily'][0]['pop'];
-    final calcPrecip = precipData * 100;
-    final precipitation = calcPrecip.toStringAsFixed(0);
+    final precip = (precipData * 100).toStringAsFixed(0);
     return AdditionalWeatherData(
-      precipitation: precipitation,
+      precipitation: precip,
       uvi: (json['daily'][0]['uvi']).toDouble(),
       clouds: json['daily'][0]['clouds'] ?? 0,
     );
