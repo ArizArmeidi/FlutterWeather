@@ -46,6 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
       body: ListView(
+        physics: BouncingScrollPhysics(),
         padding: const EdgeInsets.all(12.0),
         children: [
           WeatherInfoHeader(),
