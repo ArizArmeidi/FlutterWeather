@@ -36,13 +36,38 @@ class _HomeScreenState extends State<HomeScreen> {
           size: 30.0,
         ),
         actions: [
-          IconButton(
-            icon: PhosphorIcon(
-              PhosphorIcons.magnifyingGlass(),
-              size: 30.0,
+          SearchAnchor(
+            builder: (context, controller) => IconButton(
+              icon: PhosphorIcon(
+                PhosphorIcons.magnifyingGlass(),
+                size: 30.0,
+              ),
+              onPressed: () {
+                controller.openView();
+              },
             ),
-            onPressed: () {},
-          ),
+            suggestionsBuilder: (context, controller) {
+              List<String> searchSuggestion = [
+                'London',
+                'New York',
+                'Tokyo',
+                'Jakarta',
+                'Dubai',
+              ];
+              return searchSuggestion
+                  .map(
+                    (item) => ListTile(
+                      title: Text(item),
+                      onTap: () {
+                        setState(() {
+                          controller.closeView(item);
+                        });
+                      },
+                    ),
+                  )
+                  .toList();
+            },
+          )
         ],
       ),
       body: ListView(
