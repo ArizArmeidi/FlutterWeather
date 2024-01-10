@@ -16,8 +16,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  SearchController _searchController = SearchController();
-
   @override
   void initState() {
     super.initState();
@@ -30,12 +28,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   @override
-  void dispose() {
-    _searchController.dispose();
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -44,40 +36,14 @@ class _HomeScreenState extends State<HomeScreen> {
           size: 30.0,
         ),
         actions: [
-          SearchAnchor(
-            searchController: _searchController,
-            builder: (context, controller) => IconButton(
-              icon: PhosphorIcon(
-                PhosphorIcons.magnifyingGlass(),
-                size: 30.0,
-              ),
-              onPressed: () {
-                controller.openView();
-                controller.clear();
-              },
+          IconButton(
+            icon: PhosphorIcon(
+              PhosphorIcons.magnifyingGlass(),
+              size: 30.0,
             ),
-            suggestionsBuilder: (context, controller) {
-              List<String> searchSuggestion = [
-                'London',
-                'New York',
-                'Tokyo',
-                'Jakarta',
-                'Dubai',
-              ];
-              return searchSuggestion
-                  .map(
-                    (item) => ListTile(
-                      title: Text(item),
-                      onTap: () {
-                        setState(() {
-                          controller.closeView(item);
-                        });
-                      },
-                    ),
-                  )
-                  .toList();
-            },
-          )
+            splashRadius: 24,
+            onPressed: () {},
+          ),
         ],
       ),
       body: ListView(
