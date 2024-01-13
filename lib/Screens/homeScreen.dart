@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/provider/weatherProvider.dart';
+import 'package:flutter_weather/theme/colors.dart';
+import 'package:flutter_weather/theme/textStyle.dart';
 import 'package:flutter_weather/widgets/WeatherInfoHeader.dart';
 import 'package:flutter_weather/widgets/mainWeatherDetail.dart';
 import 'package:flutter_weather/widgets/mainWeatherInfo.dart';
@@ -17,7 +19,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  FloatingSearchBarController _fsc = FloatingSearchBarController();
   @override
   void initState() {
     super.initState();
@@ -67,46 +68,112 @@ class _HomeScreenState extends State<HomeScreen> {
               SevenDayForecast(),
             ],
           ),
-          FloatingSearchBar(
-            controller: _fsc,
-            hint: 'Search...',
-            scrollPadding: const EdgeInsets.only(top: 16, bottom: 56),
-            transitionDuration: const Duration(milliseconds: 400),
-            borderRadius: BorderRadius.circular(32.0),
-            transitionCurve: Curves.easeInOut,
-            physics: const BouncingScrollPhysics(),
-            elevation: 4.0,
-            debounceDelay: const Duration(milliseconds: 500),
-            onQueryChanged: (query) {},
-            transition: CircularFloatingSearchBarTransition(),
-            actions: [
-              FloatingSearchBarAction(
-                showIfOpened: false,
-                child: CircularButton(
-                  icon: const Icon(Icons.place),
-                  onPressed: () {},
-                ),
-              ),
-              FloatingSearchBarAction.searchToClear(showIfClosed: false),
-            ],
-            builder: (context, transition) {
-              return ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Material(
-                  color: Colors.white,
-                  elevation: 4.0,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: Colors.accents.map((color) {
-                      return Container(height: 112, color: color);
-                    }).toList(),
-                  ),
-                ),
-              );
-            },
-          ),
+          CustomSearchBar(),
         ],
       ),
+    );
+  }
+}
+
+class CustomSearchBar extends StatefulWidget {
+  const CustomSearchBar({Key? key}) : super(key: key);
+
+  @override
+  State<CustomSearchBar> createState() => _CustomSearchBarState();
+}
+
+class _CustomSearchBarState extends State<CustomSearchBar> {
+  FloatingSearchBarController _fsc = FloatingSearchBarController();
+
+  List<String> _citiesSuggestion = [
+    'New York',
+    'Tokyo',
+    'Dubai',
+    'London',
+    'Singapore',
+    'Sydney',
+    'Wellington'
+  ];
+
+  @override
+  Widget build(BuildContext context) {
+    return FloatingSearchBar(
+      controller: _fsc,
+      hint: 'Search...',
+      clearQueryOnClose: false,
+      scrollPadding: const EdgeInsets.only(top: 16.0, bottom: 56.0),
+      transitionDuration: const Duration(milliseconds: 400),
+      borderRadius: BorderRadius.circular(32.0),
+      transitionCurve: Curves.easeInOut,
+      accentColor: primaryBlue,
+      hintStyle: regularText,
+      queryStyle: regularText,
+      physics: const BouncingScrollPhysics(),
+      elevation: 2.0,
+      debounceDelay: const Duration(milliseconds: 500),
+      onQueryChanged: (query) {},
+      transition: CircularFloatingSearchBarTransition(),
+      actions: [
+        FloatingSearchBarAction(
+          showIfOpened: false,
+          child: PhosphorIcon(
+            PhosphorIconsBold.magnifyingGlass,
+            color: primaryBlue,
+          ),
+        ),
+        FloatingSearchBarAction.icon(
+          showIfClosed: false,
+          showIfOpened: true,
+          icon: PhosphorIcon(
+            PhosphorIconsBold.x,
+            color: primaryBlue,
+          ),
+          onTap: () {
+            if (_fsc.query.isEmpty) {
+              _fsc.close();
+            } else {
+              _fsc.clear();
+            }
+          },
+        ),
+      ],
+      builder: (context, transition) {
+        return ClipRRect(
+          borderRadius: BorderRadius.circular(8.0),
+          child: Material(
+            color: Colors.white,
+            elevation: 4.0,
+            child: ListView.separated(
+              shrinkWrap: true,
+              padding: EdgeInsets.zero,
+              itemCount: _citiesSuggestion.length,
+              itemBuilder: (context, index) {
+                String data = _citiesSuggestion[index];
+                return InkWell(
+                  onTap: () {
+                    _fsc.query = data;
+                    _fsc.close();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(22.0),
+                    child: Row(
+                      children: [
+                        PhosphorIcon(PhosphorIconsFill.mapPin),
+                        const SizedBox(width: 22.0),
+                        Text(data, style: mediumText),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              separatorBuilder: (context, index) => Divider(
+                thickness: 1.0,
+                height: 0.0,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }
