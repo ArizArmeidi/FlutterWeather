@@ -1,5 +1,6 @@
 String uviValueToString(double uvi) {
   if (uvi <= 2) {
+    return 'Low';
   } else if (uvi <= 5) {
     return 'Medium';
   } else if (uvi <= 7) {
