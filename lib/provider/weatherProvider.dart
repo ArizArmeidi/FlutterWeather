@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_weather/models/additionalWeatherData.dart';
+import 'package:flutter_weather/models/geocode.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
@@ -130,20 +131,19 @@ class WeatherProvider with ChangeNotifier {
     }
   }
 
-  Future<void> _searchWeatherFromLocation(String location) async {
-    Uri url = Uri.parse(
-      'https://api.openweathermap.org/data/2.5/weather?q=$location&units=metric&appid=$apiKey',
-    );
+  Future<GeocodeData?> locationToLatLng(String location) async {
     try {
-      final response = await http.get(url);
-      final extractedData = json.decode(response.body) as Map<String, dynamic>;
-      weather = Weather.fromJson(extractedData);
-    } catch (error) {
-      print(error);
-      this.isRequestError = true;
-    } finally {
-      isLoading = false;
-      notifyListeners();
+      Uri url = Uri.parse(
+        'http://api.openweathermap.org/geo/1.0/direct?q=$location&limit=5&appid=$apiKey',
+      );
+      final http.Response response = await http.get(url);
+      if (response.statusCode != 200) return null;
+      return GeocodeData.fromJson(
+        jsonDecode(response.body)[0] as Map<String, dynamic>,
+      );
+    } catch (e) {
+      print(e);
+      return null;
     }
   }
 
@@ -152,11 +152,21 @@ class WeatherProvider with ChangeNotifier {
     notifyListeners();
     isRequestError = false;
     isLocationError = false;
+    print('search');
     try {
-      await _searchWeatherFromLocation(location);
-      await getDailyWeather(LatLng(weather.lat, weather.long));
+      GeocodeData? geocodeData;
+      geocodeData = await locationToLatLng(location);
+      if (geocodeData == null) throw Exception('Unable to Find Location');
+      await getCurrentWeather(geocodeData.latLng);
+      await getDailyWeather(geocodeData.latLng);
+      // replace location name with data from geocode
+      // because data from certain lat long might return local area name
+      weather.city = geocodeData.name;
     } catch (e) {
+      print(e);
       isRequestError = true;
+    } finally {
+      isLoading = false;
       notifyListeners();
     }
   }

@@ -13,7 +13,7 @@ class Weather with ChangeNotifier {
   final String weatherCategory;
   final int humidity;
   final double windSpeed;
-  final String city;
+  String city;
   final String countryCode;
 
   Weather({

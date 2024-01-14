@@ -19,38 +19,43 @@ class WeatherInfoHeader extends StatelessWidget {
           children: [
             weatherProv.isLoading
                 ? Expanded(
-                    child: CustomShimmer(height: 48.0),
+                    child: CustomShimmer(
+                      height: 48.0,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
                   )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FittedBox(
-                        child: RichText(
-                          textAlign: TextAlign.start,
-                          text: TextSpan(
-                            text: weatherProv.weather.city + ', ',
-                            style: semiboldText,
-                            children: [
-                              TextSpan(
-                                text: Country.tryParse(
-                                        weatherProv.weather.countryCode)
-                                    ?.name,
-                                style: regularText.copyWith(fontSize: 18.0),
-                              ),
-                            ],
+                : Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FittedBox(
+                          child: RichText(
+                            textAlign: TextAlign.start,
+                            text: TextSpan(
+                              text: weatherProv.weather.city + ', ',
+                              style: semiboldText,
+                              children: [
+                                TextSpan(
+                                  text: Country.tryParse(
+                                          weatherProv.weather.countryCode)
+                                      ?.name,
+                                  style: regularText.copyWith(fontSize: 18.0),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: 4.0),
-                      FittedBox(
-                        child: Text(
-                          DateFormat('EEEE MMM dd, y  hh:mm a')
-                              .format(DateTime.now()),
-                          style:
-                              regularText.copyWith(color: Colors.grey.shade700),
-                        ),
-                      )
-                    ],
+                        const SizedBox(height: 4.0),
+                        FittedBox(
+                          child: Text(
+                            DateFormat('EEEE MMM dd, y  hh:mm a')
+                                .format(DateTime.now()),
+                            style: regularText.copyWith(
+                                color: Colors.grey.shade700),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
             const SizedBox(width: 8.0),
             ClipRRect(

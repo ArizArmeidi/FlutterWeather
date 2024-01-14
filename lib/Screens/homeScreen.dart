@@ -1,4 +1,9 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:provider/provider.dart';
+
 import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/theme/colors.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
@@ -7,9 +12,6 @@ import 'package:flutter_weather/widgets/mainWeatherDetail.dart';
 import 'package:flutter_weather/widgets/mainWeatherInfo.dart';
 import 'package:flutter_weather/widgets/sevenDayForecast.dart';
 import 'package:flutter_weather/widgets/twentyFourHourForecast.dart';
-import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
-import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -19,6 +21,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  FloatingSearchBarController fsc = FloatingSearchBarController();
+
   @override
   void initState() {
     super.initState();
@@ -54,17 +58,55 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Consumer<WeatherProvider>(
         builder: (context, weatherProv, _) {
           if (weatherProv.isRequestError) {
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Center(
-                  child: Text(
-                    'Search Error',
-                    style: semiboldText,
+            return Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  PhosphorIcon(
+                    PhosphorIconsRegular.warningCircle,
+                    size: 128.0,
+                    color: Colors.red,
                   ),
-                ),
-              ],
+                  Center(
+                    child: Text(
+                      'Search Error',
+                      style: boldText.copyWith(color: Colors.red),
+                    ),
+                  ),
+                  const SizedBox(height: 4.0),
+                  Center(
+                    child: Text(
+                      'Unable to find "${fsc.query}", check for typo or check your internet connection',
+                      style: mediumText.copyWith(color: Colors.grey.shade700),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
+                  Consumer<WeatherProvider>(builder: (context, weatherProv, _) {
+                    return SizedBox(
+                      width: MediaQuery.sizeOf(context).width / 2,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          textStyle: mediumText,
+                          padding: const EdgeInsets.all(12.0),
+                          shape: StadiumBorder(),
+                        ),
+                        child: Text('Return Home'),
+                        onPressed: weatherProv.isLoading
+                            ? null
+                            : () async {
+                                await weatherProv.getWeatherData(
+                                  context,
+                                  notify: true,
+                                );
+                              },
+                      ),
+                    );
+                  }),
+                ],
+              ),
             );
           }
           return Stack(
@@ -84,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SevenDayForecast(),
                 ],
               ),
-              CustomSearchBar(),
+              CustomSearchBar(fsc: fsc),
             ],
           );
         },
@@ -94,15 +136,17 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class CustomSearchBar extends StatefulWidget {
-  const CustomSearchBar({Key? key}) : super(key: key);
+  final FloatingSearchBarController fsc;
+  const CustomSearchBar({
+    Key? key,
+    required this.fsc,
+  }) : super(key: key);
 
   @override
   State<CustomSearchBar> createState() => _CustomSearchBarState();
 }
 
 class _CustomSearchBarState extends State<CustomSearchBar> {
-  FloatingSearchBarController _fsc = FloatingSearchBarController();
-
   List<String> _citiesSuggestion = [
     'New York',
     'Tokyo',
@@ -116,7 +160,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
   @override
   Widget build(BuildContext context) {
     return FloatingSearchBar(
-      controller: _fsc,
+      controller: widget.fsc,
       hint: 'Search...',
       clearQueryOnClose: false,
       scrollPadding: const EdgeInsets.only(top: 16.0, bottom: 56.0),
@@ -131,7 +175,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       debounceDelay: const Duration(milliseconds: 500),
       onQueryChanged: (query) {},
       onSubmitted: (query) async {
-        _fsc.close();
+        widget.fsc.close();
         await Provider.of<WeatherProvider>(context, listen: false)
             .searchWeather(query);
       },
@@ -152,10 +196,10 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             color: primaryBlue,
           ),
           onTap: () {
-            if (_fsc.query.isEmpty) {
-              _fsc.close();
+            if (widget.fsc.query.isEmpty) {
+              widget.fsc.close();
             } else {
-              _fsc.clear();
+              widget.fsc.clear();
             }
           },
         ),
@@ -175,8 +219,8 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
                 String data = _citiesSuggestion[index];
                 return InkWell(
                   onTap: () async {
-                    _fsc.query = data;
-                    _fsc.close();
+                    widget.fsc.query = data;
+                    widget.fsc.close();
                     await Provider.of<WeatherProvider>(context, listen: false)
                         .searchWeather(data);
                   },
