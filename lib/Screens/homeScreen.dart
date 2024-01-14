@@ -51,25 +51,43 @@ class _HomeScreenState extends State<HomeScreen> {
       //     ),
       //   ],
       // ),
-      body: Stack(
-        children: [
-          ListView(
-            physics: BouncingScrollPhysics(),
-            padding: const EdgeInsets.all(12.0).copyWith(top: 96.0),
+      body: Consumer<WeatherProvider>(
+        builder: (context, weatherProv, _) {
+          if (weatherProv.isRequestError) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Center(
+                  child: Text(
+                    'Search Error',
+                    style: semiboldText,
+                  ),
+                ),
+              ],
+            );
+          }
+          return Stack(
             children: [
-              WeatherInfoHeader(),
-              const SizedBox(height: 16.0),
-              MainWeatherInfo(),
-              const SizedBox(height: 16.0),
-              MainWeatherDetail(),
-              const SizedBox(height: 16.0),
-              TwentyFourHourForecast(),
-              const SizedBox(height: 16.0),
-              SevenDayForecast(),
+              ListView(
+                physics: BouncingScrollPhysics(),
+                padding: const EdgeInsets.all(12.0).copyWith(top: 96.0),
+                children: [
+                  WeatherInfoHeader(),
+                  const SizedBox(height: 16.0),
+                  MainWeatherInfo(),
+                  const SizedBox(height: 16.0),
+                  MainWeatherDetail(),
+                  const SizedBox(height: 16.0),
+                  TwentyFourHourForecast(),
+                  const SizedBox(height: 16.0),
+                  SevenDayForecast(),
+                ],
+              ),
+              CustomSearchBar(),
             ],
-          ),
-          CustomSearchBar(),
-        ],
+          );
+        },
       ),
     );
   }
@@ -103,7 +121,7 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       clearQueryOnClose: false,
       scrollPadding: const EdgeInsets.only(top: 16.0, bottom: 56.0),
       transitionDuration: const Duration(milliseconds: 400),
-      borderRadius: BorderRadius.circular(32.0),
+      borderRadius: BorderRadius.circular(16.0),
       transitionCurve: Curves.easeInOut,
       accentColor: primaryBlue,
       hintStyle: regularText,
@@ -112,6 +130,11 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
       elevation: 2.0,
       debounceDelay: const Duration(milliseconds: 500),
       onQueryChanged: (query) {},
+      onSubmitted: (query) async {
+        _fsc.close();
+        await Provider.of<WeatherProvider>(context, listen: false)
+            .searchWeather(query);
+      },
       transition: CircularFloatingSearchBarTransition(),
       actions: [
         FloatingSearchBarAction(
@@ -145,14 +168,17 @@ class _CustomSearchBarState extends State<CustomSearchBar> {
             elevation: 4.0,
             child: ListView.separated(
               shrinkWrap: true,
+              physics: BouncingScrollPhysics(),
               padding: EdgeInsets.zero,
               itemCount: _citiesSuggestion.length,
               itemBuilder: (context, index) {
                 String data = _citiesSuggestion[index];
                 return InkWell(
-                  onTap: () {
+                  onTap: () async {
                     _fsc.query = data;
                     _fsc.close();
+                    await Provider.of<WeatherProvider>(context, listen: false)
+                        .searchWeather(data);
                   },
                   child: Container(
                     padding: const EdgeInsets.all(22.0),
