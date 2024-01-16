@@ -44,7 +44,11 @@ class MainWeatherInfo extends StatelessWidget {
                     children: [
                       FittedBox(
                         child: Text(
-                          weatherProv.weather.temp.toStringAsFixed(1),
+                          weatherProv.isCelsius
+                              ? weatherProv.weather.temp.toStringAsFixed(1)
+                              : weatherProv.weather.temp
+                                  .toFahrenheit()
+                                  .toStringAsFixed(1),
                           style: boldText.copyWith(fontSize: 86),
                         ),
                       ),
