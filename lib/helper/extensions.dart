@@ -6,3 +6,7 @@ extension StringCasingExtension on String {
       .map((str) => str.toCapitalized())
       .join(' ');
 }
+
+extension DoubleExtension on double {
+  double toFahrenheit() => (this * 1.8 + 32).toDouble();
+}
