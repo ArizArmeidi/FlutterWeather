@@ -21,15 +21,15 @@ class WeatherProvider with ChangeNotifier {
   bool isLoading = false;
   bool isRequestError = false;
   bool isLocationError = false;
-  bool serviceEnabled = false;
+  bool isLocationserviceEnabled = false;
   LocationPermission? permission;
   bool isCelsius = true;
 
   String get measurementUnit => isCelsius ? '°C' : '°F';
 
   Future<Position>? requestLocation(BuildContext context) async {
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
+    isLocationserviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!isLocationserviceEnabled) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text('Location service disabled'),
       ));
