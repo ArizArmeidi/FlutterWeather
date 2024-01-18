@@ -1,5 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/helper/extensions.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
 import 'package:flutter_weather/widgets/customShimmer.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
@@ -35,14 +36,14 @@ class MainWeatherDetail extends StatelessWidget {
                 child: Row(
                   children: [
                     DetailInfoTile(
-                      icon: PhosphorIcon(
-                        PhosphorIconsRegular.thermometerSimple,
-                        color: Colors.white,
-                      ),
-                      title: 'Feels Like',
-                      data: weatherProv.weather.feelsLike.toStringAsFixed(1) +
-                          '°',
-                    ),
+                        icon: PhosphorIcon(
+                          PhosphorIconsRegular.thermometerSimple,
+                          color: Colors.white,
+                        ),
+                        title: 'Feels Like',
+                        data: weatherProv.isCelsius
+                            ? '${weatherProv.weather.feelsLike.toStringAsFixed(1)}°'
+                            : '${weatherProv.weather.feelsLike.toFahrenheit().toStringAsFixed(1)}°'),
                     VerticalDivider(
                       thickness: 1.0,
                       indent: 4.0,

@@ -90,10 +90,14 @@ class HourlyWeatherWidget extends StatelessWidget {
       width: 100.0,
       child: Column(
         children: [
-          Text(
-            data.temp.toStringAsFixed(1) + '°',
-            style: semiboldText,
-          ),
+          Consumer<WeatherProvider>(builder: (context, weatherProv, _) {
+            return Text(
+              weatherProv.isCelsius
+                  ? '${data.temp.toStringAsFixed(1)}°'
+                  : '${data.temp.toFahrenheit().toStringAsFixed(1)}°',
+              style: semiboldText,
+            );
+          }),
           Stack(
             children: [
               Divider(
