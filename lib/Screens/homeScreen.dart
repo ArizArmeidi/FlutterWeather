@@ -60,7 +60,11 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               ListView(
                 physics: BouncingScrollPhysics(),
-                padding: const EdgeInsets.all(12.0).copyWith(top: 96.0),
+                padding: const EdgeInsets.all(12.0).copyWith(
+                  top: kToolbarHeight +
+                      MediaQuery.viewPaddingOf(context).top +
+                      24.0,
+                ),
                 children: [
                   WeatherInfoHeader(),
                   const SizedBox(height: 16.0),
