@@ -43,10 +43,11 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Consumer<WeatherProvider>(
         builder: (context, weatherProv, _) {
-          if (!weatherProv.isLocationserviceEnabled)
+          if (!weatherProv.isLoading && !weatherProv.isLocationserviceEnabled)
             return LocationServiceErrorDisplay();
 
-          if (weatherProv.locationPermission != LocationPermission.always &&
+          if (!weatherProv.isLoading &&
+              weatherProv.locationPermission != LocationPermission.always &&
               weatherProv.locationPermission != LocationPermission.whileInUse) {
             return LocationPermissionErrorDisplay();
           }
