@@ -5,6 +5,7 @@ import 'package:flutter_weather/provider/weatherProvider.dart';
 import 'package:flutter_weather/screens/sevenDayForecastDetailScreen.dart';
 import 'package:flutter_weather/theme/colors.dart';
 import 'package:flutter_weather/theme/textStyle.dart';
+import 'package:flutter_weather/widgets/customShimmer.dart';
 import 'package:intl/intl.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
@@ -31,29 +32,48 @@ class SevenDayForecast extends StatelessWidget {
                 ),
               ),
               Spacer(),
-              TextButton(
-                style: TextButton.styleFrom(
-                  visualDensity: VisualDensity.compact,
-                  padding: EdgeInsets.zero,
-                  textStyle: mediumText.copyWith(fontSize: 14.0),
-                  foregroundColor: primaryBlue,
-                ),
-                child: Text('more details ▶'),
-                onPressed: () {
-                  Navigator.of(context)
-                      .pushNamed(SevenDayForecastDetail.routeName);
+              Consumer<WeatherProvider>(
+                builder: (context, weatherProv, _) {
+                  return TextButton(
+                    style: TextButton.styleFrom(
+                      visualDensity: VisualDensity.compact,
+                      padding: EdgeInsets.zero,
+                      textStyle: mediumText.copyWith(fontSize: 14.0),
+                      foregroundColor: primaryBlue,
+                    ),
+                    child: Text('more details ▶'),
+                    onPressed: weatherProv.isLoading
+                        ? null
+                        : () {
+                            Navigator.of(context)
+                                .pushNamed(SevenDayForecastDetail.routeName);
+                          },
+                  );
                 },
               )
             ],
           ),
         ),
+        const SizedBox(height: 8.0),
         Container(
           child: Consumer<WeatherProvider>(
             builder: (context, weatherProv, _) {
+              if (weatherProv.isLoading) {
+                return ListView.builder(
+                  shrinkWrap: true,
+                  padding: EdgeInsets.zero,
+                  itemCount: 7,
+                  itemBuilder: (context, index) => CustomShimmer(
+                    height: 82.0,
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                );
+              }
               return ListView.builder(
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: weatherProv.dailyWeather.length,
-                shrinkWrap: true,
                 itemBuilder: (context, index) {
                   final DailyWeather weather = weatherProv.dailyWeather[index];
                   return Material(
