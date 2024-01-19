@@ -34,41 +34,42 @@ class MainWeatherInfo extends StatelessWidget {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: 100.0,
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      FittedBox(
-                        child: Text(
-                          weatherProv.isCelsius
-                              ? weatherProv.weather.temp.toStringAsFixed(1)
-                              : weatherProv.weather.temp
-                                  .toFahrenheit()
-                                  .toStringAsFixed(1),
-                          style: boldText.copyWith(fontSize: 86),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 100.0,
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        FittedBox(
+                          child: Text(
+                            weatherProv.isCelsius
+                                ? weatherProv.weather.temp.toStringAsFixed(1)
+                                : weatherProv.weather.temp
+                                    .toFahrenheit()
+                                    .toStringAsFixed(1),
+                            style: boldText.copyWith(fontSize: 86),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          weatherProv.measurementUnit,
-                          style: mediumText.copyWith(fontSize: 26),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            weatherProv.measurementUnit,
+                            style: mediumText.copyWith(fontSize: 26),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-                Text(
-                  weatherProv.weather.description.toTitleCase(),
-                  style: lightText.copyWith(fontSize: 16),
-                )
-              ],
+                  Text(
+                    weatherProv.weather.description.toTitleCase(),
+                    style: lightText.copyWith(fontSize: 16),
+                  )
+                ],
+              ),
             ),
-            Spacer(),
             SizedBox(
               height: 148.0,
               width: 148.0,

@@ -20,26 +20,30 @@ class WeatherProvider with ChangeNotifier {
   List<DailyWeather> dailyWeather = [];
   bool isLoading = false;
   bool isRequestError = false;
-  bool isLocationError = false;
+  bool isSearchError = false;
   bool isLocationserviceEnabled = false;
-  LocationPermission? permission;
+  LocationPermission? locationPermission;
   bool isCelsius = true;
 
   String get measurementUnit => isCelsius ? '°C' : '°F';
 
-  Future<Position>? requestLocation(BuildContext context) async {
+  Future<Position?> requestLocation(BuildContext context) async {
     isLocationserviceEnabled = await Geolocator.isLocationServiceEnabled();
+    notifyListeners();
+
     if (!isLocationserviceEnabled) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Location service disabled'),
-      ));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Location service disabled')),
+      );
       return Future.error('Location services are disabled.');
     }
 
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
+    locationPermission = await Geolocator.checkPermission();
+    if (locationPermission == LocationPermission.denied) {
+      isLoading = false;
+      notifyListeners();
+      locationPermission = await Geolocator.requestPermission();
+      if (locationPermission == LocationPermission.denied) {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text('Permission denied'),
         ));
@@ -47,13 +51,15 @@ class WeatherProvider with ChangeNotifier {
       }
     }
 
-    if (permission == LocationPermission.deniedForever) {
+    if (locationPermission == LocationPermission.deniedForever) {
+      isLoading = false;
+      notifyListeners();
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        content: Text('Location permissions are permanently denied'),
+        content: Text(
+          'Location permissions are permanently denied, Please enable manually from app settings',
+        ),
       ));
-      return Future.error(
-        'Location permissions are permanently denied, we cannot request permissions.',
-      );
+      return Future.error('Location permissions are permanently denied');
     }
 
     return await Geolocator.getCurrentPosition();
@@ -65,12 +71,13 @@ class WeatherProvider with ChangeNotifier {
   }) async {
     isLoading = true;
     isRequestError = false;
-    isLocationError = false;
+    isSearchError = false;
     if (notify) notifyListeners();
 
     Position? locData = await requestLocation(context);
+
     if (locData == null) {
-      isLocationError = true;
+      isLoading = false;
       notifyListeners();
       return;
     }
@@ -81,7 +88,7 @@ class WeatherProvider with ChangeNotifier {
       await getDailyWeather(currentLocation!);
     } catch (e) {
       print(e);
-      isLocationError = true;
+      isRequestError = true;
     } finally {
       isLoading = false;
       notifyListeners();
@@ -151,7 +158,6 @@ class WeatherProvider with ChangeNotifier {
     isLoading = true;
     notifyListeners();
     isRequestError = false;
-    isLocationError = false;
     print('search');
     try {
       GeocodeData? geocodeData;
@@ -164,7 +170,7 @@ class WeatherProvider with ChangeNotifier {
       weather.city = geocodeData.name;
     } catch (e) {
       print(e);
-      isRequestError = true;
+      isSearchError = true;
     } finally {
       isLoading = false;
       notifyListeners();

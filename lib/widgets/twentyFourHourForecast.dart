@@ -57,7 +57,7 @@ class TwentyFourHourForecast extends StatelessWidget {
                 height: 128.0,
                 child: ListView.builder(
                   physics: BouncingScrollPhysics(),
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   scrollDirection: Axis.horizontal,
                   itemCount: weatherProv.hourlyWeather.length,
                   itemBuilder: (context, index) => HourlyWeatherWidget(
@@ -87,7 +87,7 @@ class HourlyWeatherWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100.0,
+      width: 124.0,
       child: Column(
         children: [
           Consumer<WeatherProvider>(builder: (context, weatherProv, _) {
@@ -128,9 +128,11 @@ class HourlyWeatherWidget extends StatelessWidget {
               fit: BoxFit.cover,
             ),
           ),
-          Text(
-            data.condition?.toTitleCase() ?? '',
-            style: regularText.copyWith(fontSize: 12.0),
+          FittedBox(
+            child: Text(
+              data.condition?.toTitleCase() ?? '',
+              style: regularText.copyWith(fontSize: 12.0),
+            ),
           ),
           const SizedBox(height: 2.0),
           Text(

@@ -1,17 +1,21 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter_weather/screens/locationError.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:material_floating_search_bar_2/material_floating_search_bar_2.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'package:flutter_weather/provider/weatherProvider.dart';
-import 'package:flutter_weather/theme/colors.dart';
-import 'package:flutter_weather/theme/textStyle.dart';
-import 'package:flutter_weather/widgets/WeatherInfoHeader.dart';
-import 'package:flutter_weather/widgets/mainWeatherDetail.dart';
-import 'package:flutter_weather/widgets/mainWeatherInfo.dart';
-import 'package:flutter_weather/widgets/sevenDayForecast.dart';
-import 'package:flutter_weather/widgets/twentyFourHourForecast.dart';
+import '../provider/weatherProvider.dart';
+import '../theme/colors.dart';
+import '../theme/textStyle.dart';
+import '../widgets/WeatherInfoHeader.dart';
+import '../widgets/mainWeatherDetail.dart';
+import '../widgets/mainWeatherInfo.dart';
+import '../widgets/sevenDayForecast.dart';
+import '../widgets/twentyFourHourForecast.dart';
+
+import 'requestError.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -37,78 +41,20 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   leading: PhosphorIcon(
-      //     PhosphorIcons.list(),
-      //     size: 30.0,
-      //   ),
-      //   actions: [
-      //     IconButton(
-      //       icon: PhosphorIcon(
-      //         PhosphorIcons.magnifyingGlass(),
-      //         size: 30.0,
-      //       ),
-      //       splashRadius: 24,
-      //       onPressed: () {
-      //         // _fsc.show();
-      //       },
-      //     ),
-      //   ],
-      // ),
       body: Consumer<WeatherProvider>(
         builder: (context, weatherProv, _) {
-          if (weatherProv.isRequestError) {
-            return Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  PhosphorIcon(
-                    PhosphorIconsRegular.warningCircle,
-                    size: 128.0,
-                    color: Colors.red,
-                  ),
-                  Center(
-                    child: Text(
-                      'Search Error',
-                      style: boldText.copyWith(color: Colors.red),
-                    ),
-                  ),
-                  const SizedBox(height: 4.0),
-                  Center(
-                    child: Text(
-                      'Unable to find "${fsc.query}", check for typo or check your internet connection',
-                      style: mediumText.copyWith(color: Colors.grey.shade700),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  const SizedBox(height: 16.0),
-                  Consumer<WeatherProvider>(builder: (context, weatherProv, _) {
-                    return SizedBox(
-                      width: MediaQuery.sizeOf(context).width / 2,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          textStyle: mediumText,
-                          padding: const EdgeInsets.all(12.0),
-                          shape: StadiumBorder(),
-                        ),
-                        child: Text('Return Home'),
-                        onPressed: weatherProv.isLoading
-                            ? null
-                            : () async {
-                                await weatherProv.getWeatherData(
-                                  context,
-                                  notify: true,
-                                );
-                              },
-                      ),
-                    );
-                  }),
-                ],
-              ),
-            );
+          if (!weatherProv.isLocationserviceEnabled)
+            return LocationServiceErrorDisplay();
+
+          if (weatherProv.locationPermission != LocationPermission.always &&
+              weatherProv.locationPermission != LocationPermission.whileInUse) {
+            return LocationPermissionErrorDisplay();
           }
+
+          if (weatherProv.isRequestError) return RequestErrorDisplay();
+
+          if (weatherProv.isSearchError) return SearchErrorDisplay(fsc: fsc);
+
           return Stack(
             children: [
               ListView(
