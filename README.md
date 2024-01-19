@@ -1,26 +1,39 @@
-<h1 align="center">FlutterWeather</h1>
-<h2 align="center">Updated to Flutter 3.0</h2>
+# FlutterWeather
+### Updated to Flutter 3.0 & New Updated Design
 
+A simple weather App created using [Flutter](https://flutter.dev/) and [Dart](https://dart.dev/) and using API from [OpenWeatherMap](https://openweathermap.org/)</br></br>
+**New Design Inspired by [Rina Damayanti](https://dribbble.com/shots/23103004-Weather-Mobile-App) on Dribbble.**</br>
 
 <p align="center">
-<img src="https://user-images.githubusercontent.com/60814961/209642694-cc9f7a28-96cc-419a-bb5c-6fb23d7befe2.png" width="30%"></img> 
-<img src="https://user-images.githubusercontent.com/60814961/209642769-c81b7288-34d8-4a95-ab14-54a31dbfeb10.png" width="30%"></img> 
-<img src="https://user-images.githubusercontent.com/60814961/209642813-6a1a32ae-7a39-48b9-ad95-e99f8cce72fb.png" width="30%"></img> 
+<img src="https://github.com/ArizArmeidi/FlutterWeather/assets/60814961/ab3f4a18-e6bb-4688-b70b-305611d7e8b5" width="20%"></img> 
+<img src="https://github.com/ArizArmeidi/FlutterWeather/assets/60814961/95cba2e0-62b7-40b5-93b2-f16ee95c96a1" width="20%"></img> 
+<img src="https://github.com/ArizArmeidi/FlutterWeather/assets/60814961/9638b4d9-ec4d-4401-9052-dacaac2f7ef6" width="20%"></img> 
+<img src="https://github.com/ArizArmeidi/FlutterWeather/assets/60814961/5189de89-1a3d-499a-867b-d12b856653a6" width="20%"></img>
 </p>
 
-# FlutterWeather
+## API Docs   
+> [!IMPORTANT] 
+> This project uses **_version 2.5_** of the OpenWeatherMap API</br>
+> **API used in this project**:</br>
+> - [Current Weather API Docs](https://openweathermap.org/current#one)</br>
+> - [One Call API Docs](https://openweathermap.org/api/one-call-api#data)</br>
+> - [Geocoding API Docs](https://openweathermap.org/api/geocoding-api)</br>
 
-A simple weather App created using [Flutter](https://flutter.dev/) and [Dart](https://dart.dev/) and using API from [OpenWeatherMap](https://openweathermap.org/)
 
-## Features
+## Features      
 - Automatically acquire user current location
 - Searchable location
 - Hourly weather information
-- 7 days weather information 
+- 7 days weather information          
+
 
 ## How to Run
 1. Create an account at [OpenWeatherMap](https://openweathermap.org/).
 2. Then get your API key from https://home.openweathermap.org/api_keys.
+   >Sometimes after getting your OpenWeatherMap API key it won't work right away </br>
+   >To test if your API key is working or not copy and paste the following link to your browser</br>
+   >https://api.openweathermap.org/data/2.5/weather?lat=53.4794892&lon=-2.2451148&units=metric&appid=YOUR_API_KEY</br>
+   >Then replace `YOUR_API_KEY` with your own API key from OpenWeatherMap
 3. Clone the repo
    ```sh
    git clone https://github.com/ArizArmeidi/FlutterWeather.git
